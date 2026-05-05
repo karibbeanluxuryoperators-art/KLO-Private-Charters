@@ -1,0 +1,36 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+    
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function isValidInquiry(data) {
+      return data.client_name is string && data.client_name.size() <= 200 &&
+             data.email is string && data.email.size() <= 200 &&
+             data.phone is string && data.phone.size() <= 100 &&
+             data.origin_airport is string && data.origin_airport.size() <= 200 &&
+             data.destination_airport is string && data.destination_airport.size() <= 200 &&
+             data.departure_date is string && data.departure_date.size() <= 200 &&
+             data.passengers is int && data.passengers > 0 &&
+             (!('status' in data) || data.status == 'pending') &&
+             data.createdAt == request.time;
+    }
+
+    match /inquiries/{inquiryId} {
+      allow create: if isValidId(inquiryId) && isValidInquiry(incoming());
+      // Only admins should read/update/delete. For now, we deny read to public.
+      // If we had an admin setup, we'd add it here.
+    }
+  }
+}

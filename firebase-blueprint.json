@@ -1,0 +1,31 @@
+{
+  "entities": {
+    "Inquiry": {
+      "title": "Inquiry",
+      "description": "A private flight inquiry from a client.",
+      "type": "object",
+      "properties": {
+        "client_name": { "type": "string", "description": "Full name of the client" },
+        "email": { "type": "string", "format": "email", "description": "Client email" },
+        "phone": { "type": "string", "description": "Client phone number" },
+        "country": { "type": "string", "description": "Client country" },
+        "origin_airport": { "type": "string", "description": "Departure airport" },
+        "destination_airport": { "type": "string", "description": "Arrival airport" },
+        "departure_date": { "type": "string", "description": "Preferred date/time of departure" },
+        "return_date": { "type": "string", "description": "Return date (null if one-way)" },
+        "passengers": { "type": "integer", "description": "Number of passengers" },
+        "cabin_class": { "type": "string", "description": " cabin class (Economy, Business, Private Charter)" },
+        "special_requests": { "type": "string", "description": "Special onboard requirements" },
+        "status": { "type": "string", "enum": ["pending", "contacted", "quoted"], "description": "Inquiry status" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "When the inquiry was created" }
+      },
+      "required": ["client_name", "email", "phone", "origin_airport", "destination_airport", "departure_date", "passengers"]
+    }
+  },
+  "firestore": {
+    "/inquiries/{inquiryId}": {
+      "schema": "Inquiry",
+      "description": "Collection of flight inquiries."
+    }
+  }
+}
