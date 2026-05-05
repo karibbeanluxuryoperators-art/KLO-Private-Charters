@@ -27,8 +27,15 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
+  const [collectedInquiry, setCollectedInquiry] = useState<any>(null);
   
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  const SUGGESTED_PROMPTS = [
+    { label: "Private Jet to Caribbean", prompt: "I'd like to book a private jet from Miami to St. Barts for 4 people next week." },
+    { label: "London Group Mission", prompt: "We need a group flight from Sao Paulo to London for 12 passengers in June." },
+    { label: "Cartagena Weekend", prompt: "Enquiry for a flight from Bogota to Cartagena this Friday for 2 people." },
+  ];
 
   useEffect(() => {
     // Initial Greeting
@@ -53,55 +60,48 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
         }
       };
       
-      // Execute immediately and then after a short delay for animation/render completion
       scroll();
       const timeoutId = setTimeout(scroll, 100);
       return () => clearTimeout(timeoutId);
     }
   }, [messages, isTyping]);
 
-  const handleSend = async () => {
-    if (!inputValue.trim() || isTyping || isComplete) return;
+  const handleSend = async (customValue?: string) => {
+    const textToSend = customValue || inputValue;
+    if (!textToSend.trim() || isTyping || isComplete) return;
 
-    const userText = inputValue;
-    const userMessage: Message = { id: Date.now().toString(), role: 'user', content: userText, timestamp: new Date() };
+    const userMessage: Message = { id: Date.now().toString(), role: 'user', content: textToSend, timestamp: new Date() };
     
     setMessages(prev => [...prev, userMessage]);
     setInputValue('');
     setIsTyping(true);
 
-    const newHistory = [...history, { role: 'user' as const, parts: [{ text: userText }] }];
+    const newHistory = [...history, { role: 'user' as const, parts: [{ text: textToSend }] }];
     setHistory(newHistory);
 
     try {
       const responseText = await chatWithConcierge(newHistory);
       
-      // Improved JSON detection and cleaning
       let content = responseText || '';
       let extractedData = null;
 
-      // Match JSON block including possible markdown wrappers
       const jsonMatch = responseText?.match(/\{[\s\S]*\}/);
       
       if (jsonMatch) {
         try {
           extractedData = JSON.parse(jsonMatch[0]);
-          
-          // Clean the content by removing the JSON block and its potential markdown wrappers
           const pattern = /```(?:json)?\s*\{[\s\S]*?\}\s*```|\{[\s\S]*?\}/g;
           content = responseText.replace(pattern, '').trim();
           
-          // Only mark as complete if we successfully parsed valid JSON 
-          // AND it has the most critical fields (to avoid premature locking with partial JSON)
           const hasRequired = extractedData.origin_airport && extractedData.destination_airport && extractedData.client_name;
           
           if (hasRequired) {
+            setCollectedInquiry(extractedData);
             await saveInquiry(extractedData);
             setIsComplete(true);
           }
         } catch (e) {
           console.error("JSON parse/save error:", e);
-          // If JSON is invalid or incomplete, just show the full text to avoid "cutting off" something useful
           content = responseText || '';
         }
       }
@@ -210,17 +210,62 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
               Typing
             </motion.div>
           )}
-          {isComplete && (
+          {messages.length === 1 && !isTyping && (
+            <motion.div 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex flex-wrap gap-2 pt-4 px-2"
+            >
+              {SUGGESTED_PROMPTS.map((item, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => handleSend(item.prompt)}
+                  className="text-[10px] uppercase tracking-widest px-4 py-2 border border-white/10 bg-white/5 hover:bg-primary/20 hover:border-primary/40 transition-all text-white/60 hover:text-white rounded-sm font-display"
+                >
+                  {item.label}
+                </button>
+              ))}
+            </motion.div>
+          )}
+
+          {isComplete && collectedInquiry && (
             <motion.div 
                initial={{ opacity: 0, scale: 0.98 }} 
                animate={{ opacity: 1, scale: 1 }}
-               className="p-10 border border-primary/20 bg-primary/5 text-center mt-12 relative overflow-hidden"
+               className="p-8 border border-primary/20 bg-primary/[0.02] text-center mt-12 relative overflow-hidden backdrop-blur-md"
             >
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(197,160,89,0.1),transparent_70%)]" />
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(197,160,89,0.05),transparent_70%)]" />
               <div className="relative z-10">
                 <div className="w-12 h-[1px] bg-primary/40 mx-auto mb-6" />
-                <h3 className="font-serif italic text-2xl text-primary mb-2">Flight Registered</h3>
-                <p className="text-white/60 text-sm font-light tracking-wide max-w-xs mx-auto">Your private aviation mission is being prioritized by our logistics team.</p>
+                <h3 className="font-serif italic text-2xl text-primary mb-6">Flight Registered</h3>
+                
+                <div className="grid grid-cols-2 gap-y-4 gap-x-8 text-left max-w-sm mx-auto mb-8">
+                  <div className="space-y-1">
+                    <p className="text-[8px] uppercase tracking-[0.2em] text-white/30 font-display">Client</p>
+                    <p className="text-xs text-white/90 font-medium uppercase tracking-wider">{collectedInquiry.client_name}</p>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-[8px] uppercase tracking-[0.2em] text-white/30 font-display">Passengers</p>
+                    <p className="text-xs text-white/90 font-medium tracking-wider">{collectedInquiry.passengers} PAX</p>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-[8px] uppercase tracking-[0.2em] text-white/30 font-display">From</p>
+                    <p className="text-xs text-white/90 font-medium uppercase tracking-wider">{collectedInquiry.origin_airport}</p>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-[8px] uppercase tracking-[0.2em] text-white/30 font-display">To</p>
+                    <p className="text-xs text-white/90 font-medium uppercase tracking-wider">{collectedInquiry.destination_airport}</p>
+                  </div>
+                  <div className="space-y-1 col-span-2">
+                    <p className="text-[8px] uppercase tracking-[0.2em] text-white/30 font-display">Departure</p>
+                    <p className="text-xs text-white/90 font-medium uppercase tracking-wider">{collectedInquiry.departure_date}</p>
+                  </div>
+                </div>
+
+                <p className="text-white/40 text-[10px] font-display uppercase tracking-[0.3em] max-w-xs mx-auto leading-relaxed">
+                  Our logistics team will verify availability and contact you via {collectedInquiry.email} within 2 hours.
+                </p>
+                
                 <div className="w-12 h-[1px] bg-primary/40 mx-auto mt-6" />
               </div>
             </motion.div>
