@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Card } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { getDb } from '@/src/lib/firebase';
 import { Message } from '@/src/types';
@@ -138,89 +139,80 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
   };
 
   return (
-    <Card className={cn("w-full h-full flex flex-col min-h-0 glass backdrop-blur-2xl border-white/5 shadow-[0_40px_120px_rgba(0,0,0,0.9)] bg-black/40 relative overflow-hidden", className)}>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(197,160,89,0.08),transparent_50%)] pointer-events-none" />
+    <Card className={cn("w-full h-full flex flex-col min-h-0 glass border-white/[0.03] shadow-[0_48px_140px_rgba(0,0,0,1)] bg-black/50 relative overflow-hidden", className)}>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(197,160,89,0.04),transparent_70%)] pointer-events-none" />
+      <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary/20 to-transparent opacity-30" />
       
-      <div className="p-3 sm:p-4 border-b border-white/5 flex items-center justify-between z-10 bg-black/40 backdrop-blur-md flex-none">
-        <div className="flex items-center gap-4 sm:gap-6">
-          <div className="flex items-center justify-center border border-primary/20 w-10 h-10 sm:w-12 sm:h-12 rounded-sm bg-primary/5 font-serif text-xl sm:text-2xl select-none leading-none">
-            <span className="text-white">K</span>
-            <span className="text-primary italic -ml-[0.12em]">L</span>
-            <span className="-ml-[0.08em] text-white">O</span>
-          </div>
-          <div className="flex flex-col">
-            <h2 className="text-lg sm:text-2xl font-serif tracking-[0.2em] text-white font-medium uppercase leading-tight">Karibbean</h2>
-            <div className="flex items-center gap-2">
-              <span className="h-[1px] w-4 bg-primary/40" />
-              <p className="text-[7px] sm:text-[9px] uppercase tracking-[0.6em] text-primary font-display font-medium">Luxury Operators</p>
-            </div>
+      <div className="p-4 sm:p-5 border-b border-white/[0.03] flex items-center justify-between z-10 bg-black/60 backdrop-blur-xl flex-none">
+        <div className="flex items-center gap-4">
+          <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse shadow-[0_0_8px_rgba(197,160,89,0.5)]" />
+          <div className="space-y-0.5">
+            <h2 className="text-[10px] sm:text-[11px] font-display tracking-[0.3em] text-white/90 uppercase font-medium">Mission Control</h2>
+            <p className="text-[8px] tracking-[0.1em] text-white/30 uppercase font-display">Private Terminal Access</p>
           </div>
         </div>
-        <div className="flex flex-col items-end gap-0.5 sm:gap-1">
-           <div className="flex items-center gap-1.5">
-             <div className="w-1 h-1 rounded-full bg-primary/60" />
-             <span className="text-[7px] sm:text-[9px] uppercase tracking-[0.2em] text-white/30 font-display">Terminal 01</span>
-           </div>
-           <span className="text-[6px] sm:text-[8px] uppercase tracking-[0.3em] text-primary/40 font-display">MMXXIV</span>
-        </div>
+        <Badge variant="outline" className="text-[9px] border-primary/20 text-primary/80 px-2.5 py-0.5 rounded-none font-display tracking-widest bg-primary/5">
+          {isComplete ? "CONCLUDED" : "ESTABLISHING"}
+        </Badge>
       </div>
 
-      <ScrollArea className="flex-1 min-h-0 px-3 sm:px-8 py-3 sm:py-4 z-10" viewportRef={scrollRef}>
-        <div className="space-y-4 sm:space-y-6 pb-24">
+      <ScrollArea className="flex-1 min-h-0 px-4 sm:px-10 py-6 sm:py-8 z-10" viewportRef={scrollRef}>
+        <div className="space-y-6 sm:space-y-8 pb-32 max-w-2xl mx-auto">
           <AnimatePresence initial={false}>
             {messages.map((message) => (
               <motion.div
                 key={message.id}
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                initial={{ opacity: 0, y: 12, filter: 'blur(8px)' }}
+                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
                 className={cn(
-                  "flex flex-col gap-3",
+                  "flex flex-col gap-2",
                   message.role === 'user' ? "items-end" : "items-start"
                 )}
               >
                 <div className={cn(
-                  "flex items-center gap-2 mb-1",
-                  message.role === 'user' ? "flex-row-reverse" : "flex-row"
+                  "max-w-[90%] sm:max-w-[80%] rounded-none p-4 sm:p-5",
+                  message.role === 'user' 
+                    ? "bg-primary/[0.03] border border-primary/10 text-white/90 font-light" 
+                    : "bg-white/[0.02] border border-white/5 text-white/80 font-light"
                 )}>
-                   <p className="text-[8px] uppercase tracking-[0.4em] text-white/30 font-display">
-                    {message.role === 'user' ? "Inquiry Client" : "Personal Concierge"}
-                   </p>
+                  <p className="text-xs sm:text-[13px] leading-relaxed tracking-wide font-light font-display">
+                    {message.content}
+                  </p>
                 </div>
-                <div
-                  className={cn(
-                    "p-5 rounded-sm text-[15px] leading-relaxed max-w-[80%] transition-shadow duration-500",
-                    message.role === 'user' 
-                      ? "bg-primary text-black font-medium shadow-[0_10px_30px_rgba(197,160,89,0.2)]" 
-                      : "bg-white/[0.03] text-white/90 border border-white/5 font-light font-display tracking-wide"
-                  )}
-                >
-                  {message.content}
-                </div>
+                <span className="text-[8px] sm:text-[9px] uppercase tracking-[0.2em] font-display text-white/20 px-1">
+                  {message.role === 'user' ? "Client" : "Concierge"} • {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                </span>
               </motion.div>
             ))}
           </AnimatePresence>
+          
           {isTyping && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-3 text-primary/40 text-[9px] uppercase tracking-[0.3em] font-display pl-2">
-              <span className="flex gap-1">
-                <span className="w-1 h-1 bg-primary/40 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                <span className="w-1 h-1 bg-primary/40 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                <span className="w-1 h-1 bg-primary/40 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
-              </span>
-              Typing
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-primary/40 text-[9px] uppercase tracking-[0.4em] font-display flex items-center gap-2"
+            >
+              <div className="flex gap-1">
+                <span className="w-0.5 h-0.5 bg-primary/40 rounded-full animate-bounce [animation-delay:-0.3s]" />
+                <span className="w-0.5 h-0.5 bg-primary/40 rounded-full animate-bounce [animation-delay:-0.15s]" />
+                <span className="w-0.5 h-0.5 bg-primary/40 rounded-full animate-bounce" />
+              </div>
+              Transmission
             </motion.div>
           )}
+
           {messages.length === 1 && !isTyping && (
             <motion.div 
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="flex flex-wrap gap-2 pt-4 px-2"
+              className="flex flex-wrap gap-3 pt-6"
             >
               {SUGGESTED_PROMPTS.map((item, idx) => (
                 <button
                   key={idx}
                   onClick={() => handleSend(item.prompt)}
-                  className="text-[10px] uppercase tracking-widest px-4 py-2 border border-white/10 bg-white/5 hover:bg-primary/20 hover:border-primary/40 transition-all text-white/60 hover:text-white rounded-sm font-display"
+                  className="text-[9px] uppercase tracking-[0.3em] px-5 py-2.5 border border-white/5 bg-white/[0.02] hover:bg-primary/[0.08] hover:border-primary/30 transition-all duration-500 text-white/40 hover:text-white rounded-none font-display font-medium"
                 >
                   {item.label}
                 </button>
@@ -230,69 +222,89 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
 
           {isComplete && collectedInquiry && (
             <motion.div 
-               initial={{ opacity: 0, scale: 0.98 }} 
-               animate={{ opacity: 1, scale: 1 }}
-               className="p-8 border border-primary/20 bg-primary/[0.02] text-center mt-12 relative overflow-hidden backdrop-blur-md"
+               initial={{ opacity: 0, y: 20 }} 
+               animate={{ opacity: 1, y: 0 }}
+               transition={{ duration: 1, delay: 0.5 }}
+               className="mt-16 relative group"
             >
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(197,160,89,0.05),transparent_70%)]" />
-              <div className="relative z-10">
-                <div className="w-12 h-[1px] bg-primary/40 mx-auto mb-6" />
-                <h3 className="font-serif italic text-2xl text-primary mb-6">Flight Registered</h3>
+              {/* Luxury Flight Manifesto Design */}
+              <div className="absolute -inset-4 bg-primary/5 blur-2xl opacity-50 transition-opacity duration-1000 group-hover:opacity-100" />
+              <div className="relative border border-primary/20 bg-black/40 p-8 sm:p-12 text-center backdrop-blur-2xl">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 px-4 bg-black border border-primary/20 text-primary text-[8px] uppercase tracking-[0.5em] py-1 font-display">
+                  Confirmed Manifesto
+                </div>
                 
-                <div className="grid grid-cols-2 gap-y-4 gap-x-8 text-left max-w-sm mx-auto mb-8">
-                  <div className="space-y-1">
-                    <p className="text-[8px] uppercase tracking-[0.2em] text-white/30 font-display">Client</p>
-                    <p className="text-xs text-white/90 font-medium uppercase tracking-wider">{collectedInquiry.client_name}</p>
+                <h3 className="font-serif italic text-3xl sm:text-4xl text-primary mb-12 opacity-90">Bon Voyage</h3>
+                
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-y-10 gap-x-12 text-left max-w-xl mx-auto mb-16">
+                  <div className="space-y-1.5">
+                    <p className="text-[9px] uppercase tracking-[0.3em] text-white/20 font-display font-bold">Client Identity</p>
+                    <p className="text-sm text-white/90 font-light font-display tracking-wider truncate">{collectedInquiry.client_name}</p>
                   </div>
-                  <div className="space-y-1">
-                    <p className="text-[8px] uppercase tracking-[0.2em] text-white/30 font-display">Passengers</p>
-                    <p className="text-xs text-white/90 font-medium tracking-wider">{collectedInquiry.passengers} PAX</p>
+                  <div className="space-y-1.5">
+                    <p className="text-[9px] uppercase tracking-[0.3em] text-white/20 font-display font-bold">Capacity</p>
+                    <p className="text-sm text-white/90 font-light font-display tracking-wider">{collectedInquiry.passengers} PAX</p>
                   </div>
-                  <div className="space-y-1">
-                    <p className="text-[8px] uppercase tracking-[0.2em] text-white/30 font-display">From</p>
-                    <p className="text-xs text-white/90 font-medium uppercase tracking-wider">{collectedInquiry.origin_airport}</p>
+                  <div className="space-y-1.5">
+                    <p className="text-[9px] uppercase tracking-[0.3em] text-white/20 font-display font-bold">Registry Date</p>
+                    <p className="text-sm text-white/90 font-light font-display tracking-wider">MMXXVI.V.V</p>
                   </div>
-                  <div className="space-y-1">
-                    <p className="text-[8px] uppercase tracking-[0.2em] text-white/30 font-display">To</p>
-                    <p className="text-xs text-white/90 font-medium uppercase tracking-wider">{collectedInquiry.destination_airport}</p>
+                  <div className="space-y-2 col-span-2 md:col-span-1 pt-4 md:pt-0">
+                    <div className="flex items-center gap-4">
+                      <div className="space-y-1">
+                        <p className="text-[9px] uppercase tracking-[0.3em] text-white/20 font-display font-bold">Origin</p>
+                        <p className="text-xs text-primary/80 font-medium font-display tracking-widest">{collectedInquiry.origin_airport}</p>
+                      </div>
+                      <div className="w-8 h-[1px] bg-primary/20 mt-4" />
+                      <div className="space-y-1">
+                        <p className="text-[9px] uppercase tracking-[0.3em] text-white/20 font-display font-bold">Target</p>
+                        <p className="text-xs text-primary/80 font-medium font-display tracking-widest">{collectedInquiry.destination_airport}</p>
+                      </div>
+                    </div>
                   </div>
-                  <div className="space-y-1 col-span-2">
-                    <p className="text-[8px] uppercase tracking-[0.2em] text-white/30 font-display">Departure</p>
-                    <p className="text-xs text-white/90 font-medium uppercase tracking-wider">{collectedInquiry.departure_date}</p>
+                  <div className="space-y-1.5 col-span-2">
+                    <p className="text-[9px] uppercase tracking-[0.3em] text-white/20 font-display font-bold">Departure Window</p>
+                    <p className="text-sm text-white/90 font-light font-display tracking-wider italic">{collectedInquiry.departure_date}</p>
                   </div>
                 </div>
 
-                <p className="text-white/40 text-[10px] font-display uppercase tracking-[0.3em] max-w-xs mx-auto leading-relaxed">
-                  Our logistics team will verify availability and contact you via {collectedInquiry.email} within 2 hours.
-                </p>
-                
-                <div className="w-12 h-[1px] bg-primary/40 mx-auto mt-6" />
+                <div className="space-y-4">
+                  <p className="text-white/30 text-[9px] font-display uppercase tracking-[0.4em] max-w-sm mx-auto leading-relaxed">
+                    Logistic protocols initiated. A bespoke itinerary is being prepared for {collectedInquiry.email}.
+                  </p>
+                  <div className="w-12 h-[1px] bg-primary/20 mx-auto" />
+                  <p className="text-[8px] uppercase tracking-[0.6em] text-primary/40 font-display">Priority Clearance</p>
+                </div>
               </div>
             </motion.div>
           )}
         </div>
       </ScrollArea>
 
-      <div className="p-2 sm:p-4 border-t border-white/5 bg-black/60 backdrop-blur-xl z-20 flex-none">
-        <div className="flex gap-2 sm:gap-4 items-center">
-          <div className="flex-1 relative group">
+      <div className="p-6 sm:p-10 border-t border-white/[0.03] z-10 bg-black/60 shadow-[0_-20px_60px_rgba(0,0,0,0.5)] flex-none">
+        <div className="max-w-xl mx-auto flex flex-col gap-4">
+          <div className="relative group">
+            {!inputValue && !isComplete && (
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="absolute left-0 top-1/2 -translate-y-1/2 text-[10px] sm:text-[11px] text-white/10 uppercase tracking-[0.4em] font-display pointer-events-none"
+              >
+                Define Mission Requirements...
+              </motion.div>
+            )}
             <Input
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-              placeholder="REQUIREMENTS..."
-              className="w-full h-10 sm:h-12 bg-transparent border-white/10 text-white placeholder:text-white/10 focus-visible:ring-primary/20 rounded-none px-0 border-x-0 border-t-0 border-b transition-all duration-500 focus:border-primary/50 text-[16px] sm:text-sm tracking-widest font-light font-display"
+              className="w-full h-12 bg-transparent border-white/5 text-white placeholder:text-transparent focus-visible:ring-0 rounded-none px-0 border-x-0 border-t-0 border-b-2 transition-all duration-700 focus:border-primary/40 text-[16px] sm:text-[15px] tracking-widest font-light font-display outline-none"
               disabled={isComplete || isTyping}
             />
           </div>
-          <Button 
-            onClick={handleSend} 
-            disabled={isComplete || isTyping || !inputValue.trim()}
-            variant="ghost"
-            className="h-10 w-10 sm:h-12 sm:w-12 rounded-none hover:bg-transparent hover:text-primary transition-all group"
-          >
-            <Send className="w-4 h-4 sm:w-5 h-5 transform transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
-          </Button>
+          <div className="flex justify-between items-center text-[8px] uppercase tracking-[0.4em] text-white/20 font-display font-medium">
+            <span>Encrypted Connection</span>
+            <span>MMXXVI</span>
+          </div>
         </div>
       </div>
     </Card>
