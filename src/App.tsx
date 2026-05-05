@@ -35,7 +35,7 @@ export default function App() {
         </header>
 
         <main className="flex-1 min-h-0 w-full max-w-4xl mx-auto px-2 sm:px-4 pb-1 sm:pb-2 flex flex-col">
-          <FlightInquiryChat />
+          <FlightInquiryChat className="flex-1 min-h-0" />
         </main>
 
         <footer className="flex-none py-1.5 text-center opacity-30 bg-black/40 backdrop-blur-md border-t border-white/5">

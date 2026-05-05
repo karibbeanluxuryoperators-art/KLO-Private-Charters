@@ -17,7 +17,11 @@ import { cn } from '@/lib/utils';
 import { chatWithConcierge } from '@/src/services/geminiService';
 import { toast } from "sonner";
 
-export default function FlightInquiryChat() {
+interface FlightInquiryChatProps {
+  className?: string;
+}
+
+export default function FlightInquiryChat({ className }: FlightInquiryChatProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [history, setHistory] = useState<{ role: "user" | "model", parts: { text: string }[] }[]>([]);
   const [inputValue, setInputValue] = useState('');
@@ -134,7 +138,7 @@ export default function FlightInquiryChat() {
   };
 
   return (
-    <Card className="w-full min-h-screen flex flex-col min-h-0 glass backdrop-blur-2xl border-white/5 shadow-[0_40px_120px_rgba(0,0,0,0.9)] bg-black/40 relative overflow-hidden">
+    <Card className={cn("w-full h-full flex flex-col min-h-0 glass backdrop-blur-2xl border-white/5 shadow-[0_40px_120px_rgba(0,0,0,0.9)] bg-black/40 relative overflow-hidden", className)}>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(197,160,89,0.08),transparent_50%)] pointer-events-none" />
       
       <div className="p-3 sm:p-4 border-b border-white/5 flex items-center justify-between z-10 bg-black/40 backdrop-blur-md flex-none">
@@ -161,7 +165,7 @@ export default function FlightInquiryChat() {
         </div>
       </div>
 
-      <ScrollArea className="flex-1 px-3 sm:px-8 py-3 sm:py-4 z-10" viewportRef={scrollRef}>
+      <ScrollArea className="flex-1 min-h-0 px-3 sm:px-8 py-3 sm:py-4 z-10" viewportRef={scrollRef}>
         <div className="space-y-4 sm:space-y-6 pb-24">
           <AnimatePresence initial={false}>
             {messages.map((message) => (
