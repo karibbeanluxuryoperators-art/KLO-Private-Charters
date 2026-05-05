@@ -45,7 +45,16 @@
   }
   body {
     @apply bg-background text-foreground font-sans antialiased;
+    overflow: hidden;
+    height: 100vh;
+    height: 100dvh;
   }
+}
+
+html {
+  overflow: hidden;
+  height: 100vh;
+  height: 100dvh;
 }
 
 .glass {

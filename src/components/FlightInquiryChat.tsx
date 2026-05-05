@@ -162,7 +162,7 @@ export default function FlightInquiryChat() {
       </div>
 
       <ScrollArea className="flex-1 px-3 sm:px-8 py-3 sm:py-4 z-10" viewportRef={scrollRef}>
-        <div className="space-y-4 sm:space-y-6 pb-2">
+        <div className="space-y-4 sm:space-y-6 pb-24">
           <AnimatePresence initial={false}>
             {messages.map((message) => (
               <motion.div
@@ -232,7 +232,7 @@ export default function FlightInquiryChat() {
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSend()}
               placeholder="REQUIREMENTS..."
-              className="w-full h-10 sm:h-12 bg-transparent border-white/10 text-white placeholder:text-white/10 focus-visible:ring-primary/20 rounded-none px-0 border-x-0 border-t-0 border-b transition-all duration-500 focus:border-primary/50 text-xs sm:text-sm tracking-widest font-light font-display"
+              className="w-full h-10 sm:h-12 bg-transparent border-white/10 text-white placeholder:text-white/10 focus-visible:ring-primary/20 rounded-none px-0 border-x-0 border-t-0 border-b transition-all duration-500 focus:border-primary/50 text-[16px] sm:text-sm tracking-widest font-light font-display"
               disabled={isComplete || isTyping}
             />
           </div>
