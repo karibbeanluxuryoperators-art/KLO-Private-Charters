@@ -134,7 +134,7 @@ export default function FlightInquiryChat() {
   };
 
   return (
-    <Card className="w-full h-full flex flex-col min-h-0 glass backdrop-blur-2xl border-white/5 shadow-[0_40px_120px_rgba(0,0,0,0.9)] bg-black/40 relative overflow-hidden">
+    <Card className="w-full min-h-screen flex flex-col min-h-0 glass backdrop-blur-2xl border-white/5 shadow-[0_40px_120px_rgba(0,0,0,0.9)] bg-black/40 relative overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(197,160,89,0.08),transparent_50%)] pointer-events-none" />
       
       <div className="p-3 sm:p-4 border-b border-white/5 flex items-center justify-between z-10 bg-black/40 backdrop-blur-md flex-none">
