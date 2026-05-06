@@ -16,7 +16,7 @@ Meta WhatsApp Cloud API  (free: 1,000 conversations/month)
           ↓
 n8n automation  (free if self-hosted)
           ↓
-Claude API — "Marcus" concierge  (~$0.01 per conversation)
+Claude API — "Maria" concierge  (~$0.01 per conversation)
           ↓
 Firebase Firestore  (free tier: 50K reads/20K writes per day)
           ↓
@@ -88,8 +88,8 @@ docker run -it --rm --name n8n -p 5678:5678 -v ~/.n8n:/home/node/.n8n n8nio/n8n
    - **Redis:** from upstash.com (free tier — used for conversation memory)
    - **Firebase token:** from Firebase Console → Project Settings → Service Accounts
 
-3. Paste the Marcus system prompt:
-   - Open the **"Ask Claude (Marcus)"** node
+3. Paste the Maria system prompt:
+   - Open the **"Ask Claude (Maria)"** node
    - In the JSON body, replace the placeholder text with the full contents of `CONCIERGE-SYSTEM-PROMPT.md`
 
 4. Activate the workflow (toggle top-right corner)
@@ -112,7 +112,7 @@ docker run -it --rm --name n8n -p 5678:5678 -v ~/.n8n:/home/node/.n8n n8nio/n8n
 
 ## Step 5 — Redis for Memory (~20 min)
 
-Without Redis, Marcus loses the conversation thread between messages.
+Without Redis, Maria loses the conversation thread between messages.
 
 1. Sign up at **upstash.com** → Create Redis Database (free tier: 10,000 commands/day)
 2. Copy the connection URL
@@ -154,7 +154,7 @@ When ready to move from the test number:
 ## Upgrade Milestones
 
 **Once you hit 50 conversations/month:**
-- Add human handoff: when Marcus detects booking intent, notify your personal WhatsApp
+- Add human handoff: when Maria detects booking intent, notify your personal WhatsApp
 
 **Once you hit 200 conversations/month:**
 - Upgrade Claude Haiku → Claude Sonnet for higher quality responses
@@ -162,7 +162,7 @@ When ready to move from the test number:
 
 **Once you hit 500 conversations/month:**
 - Add a 48-hour follow-up workflow for warm leads who went quiet
-- Connect Marcus to your booking calendar to check availability in real-time
+- Connect Maria to your booking calendar to check availability in real-time
 
 ---
 
@@ -171,7 +171,7 @@ When ready to move from the test number:
 | Problem | Fix |
 |---------|-----|
 | Webhook not verifying | Check the Verify Token matches exactly in Meta + n8n |
-| Marcus not replying | Check workflow is Active, check Claude API key is valid |
+| Maria not replying | Check workflow is Active, check Claude API key is valid |
 | Double messages | Store msgId in Redis; skip processing if already seen |
 | Memory not working | Confirm Upstash Redis is connected and the key format matches |
 | Test number only works for approved numbers | Add your personal WhatsApp number in Meta API Setup → "To" section |

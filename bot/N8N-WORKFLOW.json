@@ -1,5 +1,5 @@
 {
-  "name": "KLO — WhatsApp Concierge (Marcus)",
+  "name": "KLO — WhatsApp Concierge (Maria)",
   "nodes": [
     {
       "parameters": {
@@ -56,7 +56,7 @@
       "type": "n8n-nodes-base.redis",
       "typeVersion": 1,
       "position": [900, 220],
-      "notes": "Loads the last N messages for this WhatsApp number from Redis. This gives Marcus conversation memory. If you don't have Redis, replace with a Firestore read node."
+      "notes": "Loads the last N messages for this WhatsApp number from Redis. This gives Maria conversation memory. If you don't have Redis, replace with a Firestore read node."
     },
     {
       "parameters": {
@@ -84,11 +84,11 @@
         "bodyParametersUi": {
           "parameter": []
         },
-        "jsonBody": "={\n  \"model\": \"claude-haiku-4-5-20251001\",\n  \"max_tokens\": 512,\n  \"system\": \"[PASTE YOUR CONCIERGE-SYSTEM-PROMPT HERE — the full Marcus prompt from CONCIERGE-SYSTEM-PROMPT.md]\",\n  \"messages\": {{ JSON.stringify($json.messages) }}\n}",
+        "jsonBody": "={\n  \"model\": \"claude-haiku-4-5-20251001\",\n  \"max_tokens\": 512,\n  \"system\": \"[PASTE YOUR CONCIERGE-SYSTEM-PROMPT HERE — the full Maria prompt from CONCIERGE-SYSTEM-PROMPT.md]\",\n  \"messages\": {{ JSON.stringify($json.messages) }}\n}",
         "options": {}
       },
       "id": "claude-api",
-      "name": "Ask Claude (Marcus)",
+      "name": "Ask Claude (Maria)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 3,
       "position": [1340, 220],
@@ -96,10 +96,10 @@
     },
     {
       "parameters": {
-        "functionCode": "// Extract Marcus's reply from the Claude API response\nconst response = items[0].json;\nconst reply = response.content[0].text;\nconst from = items[0].json.from;\nconst phoneNumberId = items[0].json.phoneNumberId;\nlet messages = items[0].json.messages;\n\n// Add Marcus's reply to the history\nmessages.push({ role: 'assistant', content: reply });\n\nreturn [{\n  json: {\n    from,\n    phoneNumberId,\n    reply,\n    messages,\n    senderName: items[0].json.senderName,\n    timestamp: items[0].json.timestamp,\n  }\n}];"
+        "functionCode": "// Extract Maria's reply from the Claude API response\nconst response = items[0].json;\nconst reply = response.content[0].text;\nconst from = items[0].json.from;\nconst phoneNumberId = items[0].json.phoneNumberId;\nlet messages = items[0].json.messages;\n\n// Add Maria's reply to the history\nmessages.push({ role: 'assistant', content: reply });\n\nreturn [{\n  json: {\n    from,\n    phoneNumberId,\n    reply,\n    messages,\n    senderName: items[0].json.senderName,\n    timestamp: items[0].json.timestamp,\n  }\n}];"
       },
       "id": "extract-reply",
-      "name": "Extract Marcus Reply",
+      "name": "Extract Maria Reply",
       "type": "n8n-nodes-base.function",
       "typeVersion": 1,
       "position": [1560, 220]
@@ -123,7 +123,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 3,
       "position": [1780, 220],
-      "notes": "Sends Marcus's reply back via the Meta WhatsApp Cloud API."
+      "notes": "Sends Maria's reply back via the Meta WhatsApp Cloud API."
     },
     {
       "parameters": {
@@ -209,12 +209,12 @@
       "main": [[{ "node": "Build Message History", "type": "main", "index": 0 }]]
     },
     "Build Message History": {
-      "main": [[{ "node": "Ask Claude (Marcus)", "type": "main", "index": 0 }]]
+      "main": [[{ "node": "Ask Claude (Maria)", "type": "main", "index": 0 }]]
     },
-    "Ask Claude (Marcus)": {
-      "main": [[{ "node": "Extract Marcus Reply", "type": "main", "index": 0 }]]
+    "Ask Claude (Maria)": {
+      "main": [[{ "node": "Extract Maria Reply", "type": "main", "index": 0 }]]
     },
-    "Extract Marcus Reply": {
+    "Extract Maria Reply": {
       "main": [
         [
           { "node": "Send WhatsApp Reply", "type": "main", "index": 0 },
