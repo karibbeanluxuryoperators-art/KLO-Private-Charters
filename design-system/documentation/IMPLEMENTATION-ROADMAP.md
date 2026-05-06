@@ -1,252 +1,158 @@
 # KLO Private Charters — Implementation Roadmap
-## Caribbean Luxury Operators · Design System v1.0
-
-> *"Build it right. Build it once. Build it for the guest."*
+## Ultra-Luxury Edition · v2.0
 
 ---
 
-## Overview
-
-This roadmap delivers the full KLO Luxury UX Polish in four focused weeks. Each phase builds on the last — foundational tokens and primitives first, complex patterns and delight layers after.
-
-**Primary Success Metric:** Booking completion rate  
-**Secondary Metrics:** Page load < 2.5s · Lighthouse accessibility ≥ 95 · Time-to-book –30%
+## North Star Metric: Booking completion rate.
+Everything else is in service of it.
 
 ---
 
 ## Phase 1 — Foundation (Week 1)
-**Goal:** Install the design system bones. Every subsequent line of code builds on this.
+*Install the bones. No visible user-facing work ships this week — just the invisible infrastructure that makes everything else possible.*
 
-### Design Tokens & Theme
-- [ ] Import `DESIGN-TOKENS.css` globally (before any component styles)
-- [ ] Verify CSS variables resolve correctly in all target browsers
-- [ ] Configure dark mode toggle (`[data-theme="dark"]`)
-- [ ] Set up Google Fonts: Playfair Display + Inter (preconnect, display=swap)
-- [ ] Remove all hardcoded hex values from existing codebase
+### Day 1–2: Token Migration
+- [ ] Replace `DESIGN-TOKENS.css` v1 with v2 globally
+- [ ] Run codebase grep for all hardcoded hex values — replace with tokens
+- [ ] Verify `--obsidian`, `--ivory`, `--oro` render correctly in all browsers
+- [ ] Remove all teal, pearl, navy, and deep-sea references from CSS
+- [ ] Set up `[data-theme="dark"]` toggle on `<html>` element
 
-### Typography System
-- [ ] Apply Playfair Display to all H1–H3 globally
-- [ ] Set body font to Inter, 16px, line-height 1.8
-- [ ] Create caption utility class (12px, uppercase, 1px tracking)
-- [ ] Audit existing copy and apply [Copy Transformations](./KLO-LUXURY-UX-POLISH.md#brand-voice--copy)
+### Day 2–3: Typography
+- [ ] Load Cormorant Garamond (weights 300, 400) via Google Fonts with `display=swap`
+- [ ] Apply globally: display → Cormorant Garamond 300, body → Inter 300
+- [ ] Audit every type instance in the codebase — map to new scale
+- [ ] Set body: 16px, `--leading-body` (1.75), `--obsidian` at 88% opacity
+- [ ] Enforce `max-width: 68ch` on all prose containers
 
-### Button Components
-- [ ] Build `<Button>` component (reference `COMPONENT-EXAMPLES.tsx`)
-- [ ] Implement all 5 variants: Primary, Secondary, Ghost, Gold, Outline
-- [ ] Implement all 3 sizes: sm (32px), md (40px), lg (48px)
-- [ ] Add all states: Default, Hover, Active, Disabled, Loading
-- [ ] Confirm 48×48px minimum touch targets on mobile
+### Day 3–4: Shape & Shadow Cleanup
+- [ ] Global border-radius audit: set all cards, buttons, inputs to `0`
+- [ ] Remove all heavy box-shadows (blur > 24px) from standard elements
+- [ ] Replace with `--shadow-hair` and `--shadow-card` variants only
+- [ ] Confirm no element uses bright `#D4AF37` gold — replace with `--oro` (`#B8963E`)
 
-### Hero Section Redesign
-- [ ] Swap background to high-res vessel/aircraft photography
-- [ ] Apply `rgba(10, 17, 40, 0.4)` gradient overlay for text legibility
-- [ ] Add subtle parallax effect (30% scroll speed, passive listener)
-- [ ] Replace CTA button with luxury Gold variant
-- [ ] Add fade-in entrance animation on page load (300ms ease-out)
+### Day 5: Motion Infrastructure
+- [ ] Update all `transition-duration` values to v2 tokens (380ms floor)
+- [ ] Replace all easing curves with `--ease-klo`
+- [ ] Implement `useReveal` hook (see ANIMATIONS-GUIDE.md)
+- [ ] Add scroll progress line (1px, `--oro`, fixed top)
 
-### Navigation Refresh
-- [ ] Implement sticky header (max-height: 70px)
-- [ ] Add `backdrop-filter: blur(20px)` on scroll
-- [ ] Apply Cinzel / Inter uppercase styling to nav links
-- [ ] Add gold underline hover animation (300ms ease-in-out)
-- [ ] Build mobile full-screen overlay menu (slide from right)
-
-**Phase 1 Deliverables:**
-- Design tokens active site-wide
-- Button component shipped to production
-- Hero and nav redesigned
+**Gate:** Design and engineering review. No Phase 2 without sign-off.
 
 ---
 
-## Phase 2 — Core Experience (Weeks 2–3)
-**Goal:** Elevate the booking flow and fleet showcase — where conversion happens.
+## Phase 2 — Hero & Navigation (Week 2)
+*The first 5 seconds. Make them count.*
 
-### Form Refinement
-- [ ] Implement `<Input>` with floating labels (animate up on focus)
-- [ ] Remove full-box borders — use bottom-border only style
-- [ ] Add gold focus underline + subtle glow (`box-shadow: 0 2px 0 #D4AF37`)
-- [ ] Build `<TextArea>` with same treatment
-- [ ] Implement error state: shake animation + icon + accessible error message
-- [ ] Implement success state: animated checkmark
-- [ ] Add gold asterisk for required fields
-- [ ] Validate on blur (not on keystroke)
+### Hero Section
+- [ ] Full-bleed photography — golden hour, water, vessel
+- [ ] Implement 5-step hero reveal sequence (surface → overlay → eyebrow → headline → CTA)
+- [ ] Total reveal time: ~2.4s from page load
+- [ ] Headline: Cormorant Garamond, 112–144px, weight 300, tracking -0.04em
+- [ ] Eyebrow: Inter, 11px, uppercase, `--tracking-ultra` (0.45em)
+- [ ] Single CTA: "Begin Your Voyage" — obsidian background, ivory text, 0px radius
+- [ ] Subtle parallax on hero image (30% scroll speed, `passive: true`)
+- [ ] Static fallback for `prefers-reduced-motion`
 
-### Booking Flow — Step Indicator
-- [ ] Replace numbered steps with circular progress indicator
-- [ ] Use descriptive labels: "Departure → Details → Preferences → Confirmation"
-- [ ] Animate step transitions with slide-up (250ms luxury ease)
-- [ ] Gold fill for completed steps, pearl for pending
-
-### Date & Time Pickers
-- [ ] Style calendar component: gold highlight on selected date
-- [ ] Add preset shortcuts: "Next Week," "Next Month," "Custom"
-- [ ] Replace time spinners with elegant dropdown
-
-### Aircraft / Vessel Cards
-- [ ] Build `<VesselCard>` component (reference `COMPONENT-EXAMPLES.tsx`)
-- [ ] Add hover: 5px translateY + shadow expansion (300ms)
-- [ ] Add hover overlay with "View Details" CTA
-- [ ] Add status badges: "Recommended," "Most Popular" (gold background)
-- [ ] Show price in Playfair Display, gold color, prominent
-- [ ] Display specs as editorial typography (not table)
-
-### Micro-Interactions
-- [ ] Implement stagger-load for card grids (50ms delay per card)
-- [ ] Add scroll progress indicator (thin gold line, fixed top)
-- [ ] Implement section header fade-in (Intersection Observer, 15% threshold)
-- [ ] Add `<Divider variant="ornamental">` between major sections
-
-### Mobile Responsiveness Audit
-- [ ] Test all Phase 1 + 2 components at 320px, 375px, 768px
-- [ ] Confirm no horizontal scroll on any page
-- [ ] Verify all touch targets ≥ 48×48px
-- [ ] Confirm font-size scales properly (no text below 16px)
-
-**Phase 2 Deliverables:**
-- Complete booking flow redesigned
-- Fleet showcase polished
-- All form components shipped
-- Mobile parity confirmed
+### Navigation
+- [ ] Reduce header height from 72px → 64px
+- [ ] Logo: wordmark only, left-aligned, 100px max-width
+- [ ] Nav links: 5 max, Inter 12px, `--tracking-caps`, uppercase
+- [ ] On scroll: `rgba(12,12,12,0.80) + blur(24px)` + 1px `--oro` bottom border
+- [ ] Hover: gold underline draw animation, 380ms
+- [ ] Mobile overlay: full-screen Obsidian, Cormorant 48px links, 3-item stagger
 
 ---
 
-## Phase 3 — Delight & Polish (Week 3–4)
-**Goal:** Add the luxury layer — the details guests feel but can't name.
+## Phase 3 — Booking Flow (Week 2–3)
+*Where conversion happens. No compromise.*
 
-### Chat UI — Premium Styling
-- [ ] User messages: right-aligned, gold-tinted background (15% opacity)
-- [ ] AI responses: left-aligned, pearl background with subtle border
-- [ ] Add typing indicator: three dots, 600ms stagger pulse animation
-- [ ] Gold focus border on chat input field
-- [ ] Context sidebar: selected flight details in navy with gold accents
-- [ ] Quick-action buttons: "Confirm Booking," "Need Changes," "More Options"
-- [ ] Smooth message entrance animation (fade-in + slide-up)
+### Step Indicator (replace numbers)
+- [ ] 4 steps: "Departure" → "Details" → "Preferences" → "Review"
+- [ ] Active step: `--oro` fill circle + label below
+- [ ] Complete steps: thin check, `--oro` border
+- [ ] Pending: `--border` circle, muted label
+- [ ] Transition between steps: translateX slide + opacity, 600ms
 
-### Confirmation / Success Pages
-- [ ] Animated SVG checkmark (draws in, 800ms ease-out)
-- [ ] Headline: "Your charter awaits." (Playfair Display, 48px)
-- [ ] Booking summary in clean typographic layout
-- [ ] CTA pair: "View Itinerary" (primary) + "Need Assistance?" (ghost)
-- [ ] Trigger email confirmation on success
+### Form Inputs — Concierge Style
+- [ ] Remove all border boxes — bottom border only
+- [ ] Height: 56px
+- [ ] Labels: 11px, uppercase, `--tracking-caps`, above field
+- [ ] Focus: `border-bottom-color: var(--oro)`, 380ms transition
+- [ ] No red error states — use Obsidian at 50% opacity, em dash prefix
+- [ ] Validate on blur, never on keystroke
+- [ ] Tab order tested — full keyboard navigation through entire flow
 
-### `<Modal>` Component
-- [ ] Build `<Modal>` (reference `COMPONENT-EXAMPLES.tsx`)
-- [ ] Backdrop fade-in (250ms)
-- [ ] Panel slide-up + scale (250ms cubic-bezier(0.34, 1.56, 0.64, 1))
-- [ ] Escape key closes
-- [ ] Focus trap within modal while open
-- [ ] Scroll lock on body while open
+### Vessel / Aircraft Selection
+- [ ] Rebuild cards: 0px radius, `--shadow-card`, single 1px Oro border on hover
+- [ ] Hover: `translateY(-8px)` + shadow + Oro border (600ms)
+- [ ] Image zoom on hover: `scale(1.04)`, 600ms
+- [ ] Price: Cormorant Garamond, `--text-3xl`, `--oro-dark` color
+- [ ] "Recommended" badge: 1px Oro border, no background fill — restrained
 
-### Image Optimization Pass
-- [ ] Convert all images to AVIF (WebP fallback, JPEG last resort)
-- [ ] Add explicit `width` and `height` to all `<img>` tags
-- [ ] Apply `loading="lazy"` to all below-fold images
-- [ ] Add `srcset` at 1x, 2x, 3x densities
-- [ ] Preload hero image via `<link rel="preload">`
-
-### Animation Audit
-- [ ] Add `prefers-reduced-motion` override to all animations
-- [ ] Confirm no layout-triggering properties animated (width, height, margin)
-- [ ] Test all animations at 0.25× speed — no jarring moments
-- [ ] Verify GPU-compositable properties only (transform, opacity, filter)
-
-**Phase 3 Deliverables:**
-- Chat UI polished and shipped
-- Confirmation flow complete
-- All images optimized
-- Animation layer finalized
+### Confirmation Success
+- [ ] Animated Oro hairline that draws across the screen (top, 1.2s)
+- [ ] Then: headline fades up — "Your charter is arranged."
+- [ ] Booking summary: clean typographic layout, `--shadow-hair` dividers
+- [ ] Two actions only: "View Itinerary" and "Speak with Your Advisor"
 
 ---
 
-## Phase 4 — Performance & Accessibility (Week 4)
-**Goal:** Ship with confidence. Every metric in the green.
+## Phase 4 — Finish & Ship (Week 4)
+*Performance, accessibility, and the details that guests feel but never see.*
 
-### Lighthouse Audit
-- [ ] Run full Lighthouse audit: Performance, Accessibility, Best Practices, SEO
-- [ ] Target scores: Performance ≥ 90, Accessibility ≥ 95, Best Practices ≥ 95
-- [ ] Fix all Critical and High severity issues
-- [ ] Resolve any color contrast failures (target 7:1 for body text)
+### Image Optimization
+- [ ] All images: AVIF first, WebP fallback, JPEG last
+- [ ] Every `<img>` has explicit width and height (zero CLS tolerance)
+- [ ] `loading="lazy"` on all below-fold images
+- [ ] Hero image preloaded via `<link rel="preload">`
+- [ ] Hero video: muted, loop, < 8MB, static fallback
 
-### Core Web Vitals
-- [ ] LCP < 2.0s — optimize largest above-fold element
-- [ ] CLS < 0.05 — fix any layout shift from fonts or images
-- [ ] INP < 100ms — profile and fix any interaction delays
+### Accessibility Audit
+- [ ] All text contrast ≥ 7:1 (above AA — we target AAA on body)
+- [ ] Touch targets: 48×48px minimum
+- [ ] Full keyboard navigation with visible focus (1px `--oro` outline, 3px offset)
+- [ ] VoiceOver test: complete booking flow narrated correctly
+- [ ] All images have descriptive alt text — never empty on content images
+- [ ] Form: all fields labelled, errors announced via `role="alert"`
 
-### Keyboard & Screen Reader Testing
-- [ ] Complete tab-through of entire booking flow (no traps, no dead ends)
-- [ ] Test with VoiceOver (macOS/iOS) — all interactive elements announced correctly
-- [ ] Test with NVDA (Windows) — form validation errors read aloud
-- [ ] Verify all images have descriptive alt text
-- [ ] Confirm all form fields have visible labels + aria association
+### Performance
+- [ ] LCP < 2.0s
+- [ ] CLS = 0.00
+- [ ] INP < 100ms
+- [ ] Initial JS bundle < 150KB gzipped
+- [ ] Lighthouse Performance ≥ 90 · Accessibility ≥ 95
 
-### Cross-Browser QA
-- [ ] Chrome (latest 2 versions)
-- [ ] Firefox (latest 2 versions)
-- [ ] Safari (latest 2 versions) — including iOS Safari
-- [ ] Edge (latest)
-- [ ] Test on real devices: iPhone 14, Samsung Galaxy S23, iPad Pro
-
-### Bundle Optimization
-- [ ] Implement route-based code splitting
-- [ ] Confirm initial JS bundle < 150KB gzipped
-- [ ] Remove unused CSS (PurgeCSS or equivalent)
-- [ ] Enable gzip / Brotli compression on server
-
-### A/B Test Setup
-- [ ] Baseline metrics captured: booking completion rate, time-to-book
-- [ ] A/B test configured for: new booking flow vs. current
-- [ ] UTM tracking verified on all CTAs
-- [ ] Analytics events firing for: step completions, form errors, charter confirmations
-
-**Phase 4 Deliverables:**
-- All Lighthouse scores green
-- Full accessibility sign-off
-- Cross-browser QA passed
-- A/B tests live
+### Final Review
+- [ ] The 10-second test (see UX Polish doc, Section 11) — pass on all key screens
+- [ ] Device test: iPhone 15, Samsung Galaxy, iPad Pro, 27" desktop
+- [ ] Browser test: Chrome, Safari, Firefox, Edge (latest 2 versions each)
+- [ ] iOS Safari specifically — most charter guests are on iPhone
 
 ---
 
-## Timeline Summary
+## Timeline
 
-| Week | Phase | Focus |
-|------|-------|-------|
-| 1 | Foundation | Tokens, typography, buttons, hero, nav |
-| 2 | Core Experience | Forms, booking flow, vessel cards |
-| 3 | Delight & Polish | Chat UI, animations, image optimization |
-| 4 | Performance & QA | Lighthouse, a11y, cross-browser, A/B tests |
+| Week | Phase | Outcome |
+|------|-------|---------|
+| 1 | Foundation | Tokens, type, shape, motion infrastructure |
+| 2 | Hero & Nav | First impression completely redesigned |
+| 2–3 | Booking Flow | Conversion path rebuilt |
+| 4 | Finish & Ship | Performance, a11y, QA, launch |
 
 ---
 
 ## Success Criteria
 
-At end of Week 4, the following must be true:
-
-| Metric | Target | Owner |
-|--------|--------|-------|
-| Booking completion rate | +10% vs. baseline | Product |
-| Time-to-book | –30% vs. baseline | Product |
-| Page load time | < 2.5s (P75) | Engineering |
-| LCP | < 2.0s | Engineering |
-| CLS | < 0.05 | Engineering |
-| Lighthouse Accessibility | ≥ 95 / 100 | Engineering |
-| Mobile conversion parity | ± 5% of desktop | Product |
-| Zero critical a11y failures | 0 | Design / Eng |
+| Metric | Target |
+|--------|--------|
+| Booking completion rate | +15% vs. current baseline |
+| Time-to-complete inquiry | < 4 minutes |
+| LCP | < 2.0s |
+| CLS | 0.00 |
+| Lighthouse Accessibility | ≥ 95 |
+| 10-second test pass rate | 9/10 testers identify "luxury private charter" |
 
 ---
 
-## Team & Ownership
-
-| Area | Responsible |
-|------|-------------|
-| Design tokens & component library | Frontend Lead |
-| Booking flow & forms | Frontend + Product |
-| Chat UI | Frontend + AI Integration |
-| Image optimization | DevOps / Frontend |
-| Accessibility audit | QA + Design |
-| Performance & Lighthouse | Engineering |
-| A/B test setup | Growth / Analytics |
-
----
-
-*KLO Design System — Implementation Roadmap*
-*Version 1.0 | Last updated: 2026*
+*KLO Roadmap · v2.0 · 2026*

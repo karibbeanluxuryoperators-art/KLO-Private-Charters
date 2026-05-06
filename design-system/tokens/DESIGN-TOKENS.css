@@ -1,313 +1,243 @@
 /**
  * KLO Private Charters — Design Tokens
- * Caribbean Luxury Operators Design System v1.0
- * ─────────────────────────────────────────────
- * Single source of truth for all visual values.
- * Import this file globally before any component styles.
+ * Ultra-Luxury Edition · v2.0
+ * ─────────────────────────────────────────────────────
+ * Philosophy: Restraint is the mark of true luxury.
+ * Three colors. Two typefaces. One feeling.
+ *
+ * Reference brands: Rolls-Royce · Chanel · NetJets · Cartier
  */
 
 :root {
 
-  /* ══════════════════════════════════════
-     COLOR PALETTE
-     ══════════════════════════════════════ */
+  /* ══════════════════════════════════════════════════
+     COLOR — Three colors. That is all.
+     ══════════════════════════════════════════════════ */
 
-  /* Brand — Deep Sea */
-  --color-deep-sea-950: #020B14;
-  --color-deep-sea-900: #051A2E;
-  --color-deep-sea-800: #0A2E4F;
-  --color-deep-sea-700: #0F4270;
-  --color-deep-sea-600: #155691;
-  --color-deep-sea-500: #1A6AB2;
-  --color-deep-sea-400: #3E88C8;
-  --color-deep-sea-300: #6AA7D9;
-  --color-deep-sea-200: #9DC6EA;
-  --color-deep-sea-100: #D0E5F6;
-  --color-deep-sea-50:  #EBF4FB;
+  /* I. Obsidian — the dominant dark */
+  --obsidian:        #0C0C0C;
+  --obsidian-soft:   #161616;
+  --obsidian-muted:  #242424;
+  --obsidian-ghost:  rgba(12, 12, 12, 0.06);
 
-  /* Brand — Caribbean Turquoise */
-  --color-turquoise-950: #00120F;
-  --color-turquoise-900: #00231E;
-  --color-turquoise-800: #004640;
-  --color-turquoise-700: #006960;
-  --color-turquoise-600: #008C80;
-  --color-turquoise-500: #00AF9F;
-  --color-turquoise-400: #00C9B7;
-  --color-turquoise-300: #33D9C9;
-  --color-turquoise-200: #80E8DF;
-  --color-turquoise-100: #CCF6F3;
-  --color-turquoise-50:  #E5FAF9;
+  /* II. Ivory — the dominant light */
+  --ivory:           #F4EFE6;
+  --ivory-warm:      #EDE6D9;
+  --ivory-cool:      #F9F7F4;
+  --ivory-ghost:     rgba(244, 239, 230, 0.06);
 
-  /* Brand — Champagne Gold */
-  --color-gold-950: #1A1200;
-  --color-gold-900: #332400;
-  --color-gold-800: #664800;
-  --color-gold-700: #996C00;
-  --color-gold-600: #CC9000;
-  --color-gold-500: #FFB400;
-  --color-gold-400: #FFC333;
-  --color-gold-300: #FFD266;
-  --color-gold-200: #FFE199;
-  --color-gold-100: #FFF0CC;
-  --color-gold-50:  #FFF8E5;
+  /* III. Oro — gold, used like gilding — sparingly */
+  --oro:             #B8963E;   /* Antique, not bright — this is old money */
+  --oro-light:       #D4AF6A;
+  --oro-dark:        #8A6E2C;
+  --oro-ghost:       rgba(184, 150, 62, 0.12);
+  --oro-glow:        rgba(184, 150, 62, 0.20);
 
-  /* Brand — Pearl White */
-  --color-pearl-100: #FDFCFA;
-  --color-pearl-200: #FAF8F4;
-  --color-pearl-300: #F5F1EB;
-  --color-pearl-400: #EDE7DC;
-  --color-pearl-500: #E0D6C8;
+  /* Functional — derived only, never add more */
+  --overlay:         rgba(12, 12, 12, 0.68);
+  --overlay-heavy:   rgba(12, 12, 12, 0.85);
+  --glass:           rgba(244, 239, 230, 0.04);
+  --glass-border:    rgba(244, 239, 230, 0.08);
 
-  /* Neutral — Obsidian */
-  --color-obsidian-950: #080808;
-  --color-obsidian-900: #121212;
-  --color-obsidian-800: #1E1E1E;
-  --color-obsidian-700: #2C2C2C;
-  --color-obsidian-600: #3D3D3D;
-  --color-obsidian-500: #525252;
-  --color-obsidian-400: #737373;
-  --color-obsidian-300: #9E9E9E;
-  --color-obsidian-200: #C4C4C4;
-  --color-obsidian-100: #E8E8E8;
-  --color-obsidian-50:  #F5F5F5;
+  /* ── Semantic assignments ── */
+  --bg:              var(--ivory);
+  --bg-alt:          var(--ivory-warm);
+  --bg-inverse:      var(--obsidian);
+  --surface:         var(--ivory-cool);
+  --surface-inverse: var(--obsidian-soft);
 
-  /* Semantic Colors */
-  --color-success-500: #1A9E6A;
-  --color-success-100: #D1F0E4;
-  --color-warning-500: #E08C00;
-  --color-warning-100: #FFF0CC;
-  --color-error-500:   #CC2B2B;
-  --color-error-100:   #FADADB;
-  --color-info-500:    #1A6AB2;
-  --color-info-100:    #D0E5F6;
+  --text:            var(--obsidian);
+  --text-secondary:  rgba(12, 12, 12, 0.52);
+  --text-tertiary:   rgba(12, 12, 12, 0.32);
+  --text-inverse:    var(--ivory);
+  --text-inverse-secondary: rgba(244, 239, 230, 0.52);
+  --text-accent:     var(--oro-dark);
 
-  /* ══════════════════════════════════════
-     SEMANTIC COLOR ASSIGNMENTS
-     ══════════════════════════════════════ */
+  --border:          rgba(12, 12, 12, 0.10);
+  --border-strong:   rgba(12, 12, 12, 0.22);
+  --border-accent:   var(--oro);
+  --border-inverse:  rgba(244, 239, 230, 0.10);
 
-  /* Backgrounds */
-  --bg-primary:          var(--color-pearl-100);
-  --bg-secondary:        var(--color-pearl-200);
-  --bg-tertiary:         var(--color-pearl-300);
-  --bg-inverse:          var(--color-deep-sea-900);
-  --bg-overlay:          rgba(2, 11, 20, 0.72);
-  --bg-glass:            rgba(255, 255, 255, 0.08);
-  --bg-glass-dark:       rgba(5, 26, 46, 0.85);
+  --cta-bg:          var(--obsidian);
+  --cta-text:        var(--ivory);
+  --cta-bg-hover:    var(--obsidian-soft);
 
-  /* Text */
-  --text-primary:        var(--color-obsidian-900);
-  --text-secondary:      var(--color-obsidian-600);
-  --text-tertiary:       var(--color-obsidian-400);
-  --text-disabled:       var(--color-obsidian-300);
-  --text-inverse:        var(--color-pearl-100);
-  --text-brand:          var(--color-deep-sea-700);
-  --text-accent:         var(--color-gold-600);
-  --text-link:           var(--color-turquoise-600);
-  --text-link-hover:     var(--color-turquoise-700);
+  --cta-gold-bg:     var(--oro);
+  --cta-gold-text:   var(--ivory);
+  --cta-gold-hover:  var(--oro-dark);
 
-  /* Borders */
-  --border-subtle:       var(--color-obsidian-100);
-  --border-default:      var(--color-obsidian-200);
-  --border-strong:       var(--color-obsidian-400);
-  --border-brand:        var(--color-deep-sea-500);
-  --border-accent:       var(--color-gold-400);
-  --border-glass:        rgba(255, 255, 255, 0.12);
-
-  /* Interactive */
-  --interactive-primary:         var(--color-deep-sea-700);
-  --interactive-primary-hover:   var(--color-deep-sea-800);
-  --interactive-primary-active:  var(--color-deep-sea-900);
-  --interactive-accent:          var(--color-gold-500);
-  --interactive-accent-hover:    var(--color-gold-400);
-  --interactive-accent-active:   var(--color-gold-600);
-
-  /* ══════════════════════════════════════
+  /* ══════════════════════════════════════════════════
      TYPOGRAPHY
-     ══════════════════════════════════════ */
+     Two typefaces. The display and the body. Nothing else.
+     ══════════════════════════════════════════════════ */
 
-  /* Font Families */
-  --font-display:   'Cormorant Garamond', 'Playfair Display', Georgia, serif;
-  --font-body:      'Inter', 'Helvetica Neue', Arial, sans-serif;
-  --font-accent:    'Cinzel', 'Trajan Pro', Georgia, serif;
-  --font-mono:      'JetBrains Mono', 'Fira Code', monospace;
+  --font-display:  'Cormorant Garamond', 'IM Fell English', Didot, 'Bodoni MT', Georgia, serif;
+  --font-body:     'Inter', 'Helvetica Neue', -apple-system, sans-serif;
+  /* Label utility: use font-body + --tracking-caps + uppercase */
 
-  /* Font Sizes — Major Third Scale (1.25) */
-  --text-xs:    0.64rem;   /* 10.24px */
-  --text-sm:    0.8rem;    /* 12.8px  */
-  --text-base:  1rem;      /* 16px    */
-  --text-md:    1.25rem;   /* 20px    */
-  --text-lg:    1.563rem;  /* 25px    */
-  --text-xl:    1.953rem;  /* 31.25px */
-  --text-2xl:   2.441rem;  /* 39px    */
-  --text-3xl:   3.052rem;  /* 48.8px  */
-  --text-4xl:   3.815rem;  /* 61px    */
-  --text-5xl:   4.768rem;  /* 76.3px  */
-  --text-6xl:   5.96rem;   /* 95.4px  */
+  /* Scale — augmented fifth (×1.5) */
+  --text-2xs:   0.625rem;   /* 10px  — legal, fine print */
+  --text-xs:    0.75rem;    /* 12px  — captions, labels */
+  --text-sm:    0.875rem;   /* 14px  — secondary body */
+  --text-base:  1rem;       /* 16px  — primary body */
+  --text-md:    1.125rem;   /* 18px  — lead paragraph */
+  --text-lg:    1.5rem;     /* 24px  — small display */
+  --text-xl:    2.25rem;    /* 36px  — section titles */
+  --text-2xl:   3rem;       /* 48px  */
+  --text-3xl:   4rem;       /* 64px  */
+  --text-4xl:   5.5rem;     /* 88px  */
+  --text-5xl:   7rem;       /* 112px */
+  --text-6xl:   9rem;       /* 144px — hero, cinematic */
 
-  /* Font Weights */
-  --weight-thin:       100;
-  --weight-light:      300;
-  --weight-regular:    400;
-  --weight-medium:     500;
-  --weight-semibold:   600;
-  --weight-bold:       700;
-  --weight-extrabold:  800;
+  /* Weights */
+  --thin:        100;
+  --light:       300;   /* Primary display weight */
+  --regular:     400;
+  --medium:      500;
+  --semibold:    600;
 
-  /* Line Heights */
+  /* Leading */
   --leading-none:    1;
-  --leading-tight:   1.2;
-  --leading-snug:    1.35;
-  --leading-normal:  1.5;
-  --leading-relaxed: 1.65;
-  --leading-loose:   1.85;
+  --leading-display: 1.05;  /* For large serif — very tight */
+  --leading-heading: 1.2;
+  --leading-body:    1.75;  /* Generous for luxury editorial */
+  --leading-loose:   2;
 
-  /* Letter Spacing */
-  --tracking-tightest: -0.04em;
-  --tracking-tight:    -0.02em;
+  /* Tracking */
+  --tracking-tight:    -0.04em;  /* Large display type */
+  --tracking-display:  -0.02em;
   --tracking-normal:    0;
-  --tracking-wide:      0.05em;
-  --tracking-wider:     0.1em;
-  --tracking-widest:    0.2em;
-  --tracking-luxury:    0.35em;  /* KLO signature wide-spaced caps */
+  --tracking-caps:      0.18em;  /* ALL-CAPS labels */
+  --tracking-luxury:    0.30em;  /* Signature wide-spaced labels */
+  --tracking-ultra:     0.45em;  /* Hero eyebrow text */
 
-  /* ══════════════════════════════════════
-     SPACING — Base 8 Grid
-     ══════════════════════════════════════ */
+  /* ══════════════════════════════════════════════════
+     SPACING — Base 8 · Ultra-generous scale
+     ══════════════════════════════════════════════════ */
 
-  --space-0:    0;
-  --space-1:    0.25rem;   /* 4px  */
-  --space-2:    0.5rem;    /* 8px  */
-  --space-3:    0.75rem;   /* 12px */
-  --space-4:    1rem;      /* 16px */
-  --space-5:    1.25rem;   /* 20px */
-  --space-6:    1.5rem;    /* 24px */
-  --space-8:    2rem;      /* 32px */
-  --space-10:   2.5rem;    /* 40px */
-  --space-12:   3rem;      /* 48px */
-  --space-16:   4rem;      /* 64px */
-  --space-20:   5rem;      /* 80px */
-  --space-24:   6rem;      /* 96px */
-  --space-32:   8rem;      /* 128px */
-  --space-40:   10rem;     /* 160px */
-  --space-48:   12rem;     /* 192px */
-  --space-64:   16rem;     /* 256px */
+  --sp-1:    0.25rem;    /* 4px  */
+  --sp-2:    0.5rem;     /* 8px  */
+  --sp-3:    0.75rem;    /* 12px */
+  --sp-4:    1rem;       /* 16px */
+  --sp-6:    1.5rem;     /* 24px */
+  --sp-8:    2rem;       /* 32px */
+  --sp-10:   2.5rem;     /* 40px */
+  --sp-12:   3rem;       /* 48px */
+  --sp-16:   4rem;       /* 64px */
+  --sp-20:   5rem;       /* 80px */
+  --sp-24:   6rem;       /* 96px */
+  --sp-32:   8rem;       /* 128px */
+  --sp-40:   10rem;      /* 160px */
+  --sp-48:   12rem;      /* 192px */
+  --sp-64:   16rem;      /* 256px */
 
-  /* Layout Containers */
-  --container-sm:   640px;
-  --container-md:   768px;
-  --container-lg:   1024px;
-  --container-xl:   1280px;
-  --container-2xl:  1440px;
-  --container-3xl:  1600px;
+  /* Section rhythm — ultra-lux breathes */
+  --section-sm:     var(--sp-24);   /* 96px  */
+  --section-md:     var(--sp-32);   /* 128px */
+  --section-lg:     var(--sp-48);   /* 192px */
+  --section-hero:   var(--sp-64);   /* 256px */
 
-  /* ══════════════════════════════════════
-     BORDER RADIUS
-     ══════════════════════════════════════ */
+  /* Max widths */
+  --max-prose:      640px;
+  --max-content:    1100px;
+  --max-wide:       1380px;
 
-  --radius-none:   0;
-  --radius-xs:     2px;
-  --radius-sm:     4px;
-  --radius-md:     8px;
-  --radius-lg:     12px;
-  --radius-xl:     16px;
-  --radius-2xl:    24px;
-  --radius-3xl:    32px;
-  --radius-full:   9999px;
+  /* ══════════════════════════════════════════════════
+     BORDERS — Sharp. No radius except where essential.
+     ══════════════════════════════════════════════════ */
 
-  /* ══════════════════════════════════════
-     SHADOWS — Luxury Depth System
-     ══════════════════════════════════════ */
+  --radius-none:    0;
+  --radius-xs:      2px;   /* Subtle — use only for inline badges */
+  --radius-sm:      4px;   /* Absolute maximum for most elements */
+  --radius-full:    9999px;
 
-  --shadow-xs:      0 1px 2px rgba(2, 11, 20, 0.06);
-  --shadow-sm:      0 2px 4px rgba(2, 11, 20, 0.08), 0 1px 2px rgba(2, 11, 20, 0.06);
-  --shadow-md:      0 4px 12px rgba(2, 11, 20, 0.10), 0 2px 4px rgba(2, 11, 20, 0.06);
-  --shadow-lg:      0 8px 24px rgba(2, 11, 20, 0.12), 0 4px 8px rgba(2, 11, 20, 0.08);
-  --shadow-xl:      0 16px 48px rgba(2, 11, 20, 0.16), 0 8px 16px rgba(2, 11, 20, 0.10);
-  --shadow-2xl:     0 32px 80px rgba(2, 11, 20, 0.22), 0 16px 32px rgba(2, 11, 20, 0.12);
-  --shadow-inner:   inset 0 2px 6px rgba(2, 11, 20, 0.10);
+  /* Ultra-lux default: 0px. Sharp is architectural. Sharp is expensive. */
 
-  /* Luxury Glow Effects */
-  --shadow-gold:      0 0 24px rgba(255, 180, 0, 0.20), 0 8px 32px rgba(2, 11, 20, 0.14);
-  --shadow-turquoise: 0 0 24px rgba(0, 175, 159, 0.18), 0 8px 32px rgba(2, 11, 20, 0.14);
-  --shadow-deep-sea:  0 0 32px rgba(26, 106, 178, 0.16), 0 8px 32px rgba(2, 11, 20, 0.18);
+  /* ══════════════════════════════════════════════════
+     SHADOWS — Barely there. Luxury doesn't shout depth.
+     ══════════════════════════════════════════════════ */
 
-  /* ══════════════════════════════════════
-     TRANSITIONS & MOTION
-     ══════════════════════════════════════ */
+  --shadow-hair:    0 1px 0 rgba(12, 12, 12, 0.06);
+  --shadow-subtle:  0 2px 12px rgba(12, 12, 12, 0.06);
+  --shadow-card:    0 4px 24px rgba(12, 12, 12, 0.07), 0 1px 4px rgba(12, 12, 12, 0.04);
+  --shadow-float:   0 16px 48px rgba(12, 12, 12, 0.10), 0 4px 12px rgba(12, 12, 12, 0.06);
+  --shadow-modal:   0 32px 80px rgba(12, 12, 12, 0.16);
+
+  /* Gold accent shadows — use only on featured elements */
+  --shadow-oro:     0 0 0 1px var(--oro), 0 8px 32px rgba(184, 150, 62, 0.14);
+
+  /* ══════════════════════════════════════════════════
+     MOTION — Slow, deliberate, inevitable.
+     ══════════════════════════════════════════════════ */
 
   /* Durations */
-  --duration-instant:  50ms;
-  --duration-fast:     150ms;
-  --duration-normal:   250ms;
-  --duration-slow:     400ms;
-  --duration-slower:   600ms;
-  --duration-slowest:  900ms;
-  --duration-reveal:   1200ms;
-  --duration-cinematic: 2000ms;
+  --dur-snap:       80ms;    /* Press/active feedback only */
+  --dur-micro:      200ms;   /* Subtle hover color shifts */
+  --dur-base:       380ms;   /* Standard interactions */
+  --dur-enter:      600ms;   /* Elements entering the screen */
+  --dur-reveal:     900ms;   /* Scroll-triggered reveals */
+  --dur-slow:       1200ms;  /* Hero reveals */
+  --dur-cinematic:  2000ms;  /* Full-page transitions, opening sequences */
 
-  /* Easing */
-  --ease-linear:      linear;
-  --ease-in:          cubic-bezier(0.4, 0, 1, 1);
-  --ease-out:         cubic-bezier(0, 0, 0.2, 1);
-  --ease-in-out:      cubic-bezier(0.4, 0, 0.2, 1);
-  --ease-luxury:      cubic-bezier(0.22, 1, 0.36, 1);   /* Signature KLO easing */
-  --ease-bounce:      cubic-bezier(0.34, 1.56, 0.64, 1);
-  --ease-spring:      cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  /* Easing — always decelerate. Luxury never rushes out of the door. */
+  --ease-out:       cubic-bezier(0, 0, 0.2, 1);
+  --ease-in:        cubic-bezier(0.4, 0, 1, 1);
 
-  /* Transition Presets */
-  --transition-fast:    all var(--duration-fast) var(--ease-luxury);
-  --transition-normal:  all var(--duration-normal) var(--ease-luxury);
-  --transition-slow:    all var(--duration-slow) var(--ease-luxury);
-  --transition-color:   color var(--duration-fast) var(--ease-out),
-                        background-color var(--duration-fast) var(--ease-out),
-                        border-color var(--duration-fast) var(--ease-out);
-  --transition-shadow:  box-shadow var(--duration-normal) var(--ease-luxury);
-  --transition-transform: transform var(--duration-normal) var(--ease-luxury);
+  /* KLO Signature — starts sharp, trails into stillness */
+  --ease-klo:       cubic-bezier(0.16, 1, 0.3, 1);
 
-  /* ══════════════════════════════════════
-     Z-INDEX SCALE
-     ══════════════════════════════════════ */
+  /* For large display reveals */
+  --ease-cinematic: cubic-bezier(0.12, 0.8, 0.2, 1);
 
-  --z-below:      -1;
-  --z-base:        0;
-  --z-raised:      10;
-  --z-dropdown:    100;
-  --z-sticky:      200;
-  --z-overlay:     300;
-  --z-modal:       400;
-  --z-toast:       500;
-  --z-tooltip:     600;
-  --z-top:         9999;
+  /* Presets */
+  --transition-color:     color var(--dur-micro) var(--ease-out),
+                          background-color var(--dur-micro) var(--ease-out),
+                          border-color var(--dur-micro) var(--ease-out),
+                          opacity var(--dur-micro) var(--ease-out);
+  --transition-base:      all var(--dur-base) var(--ease-klo);
+  --transition-enter:     all var(--dur-enter) var(--ease-klo);
+  --transition-transform: transform var(--dur-base) var(--ease-klo);
+  --transition-shadow:    box-shadow var(--dur-base) var(--ease-klo);
 
-  /* ══════════════════════════════════════
-     BREAKPOINTS (reference only — use in JS)
-     ══════════════════════════════════════ */
-  /* sm: 640px | md: 768px | lg: 1024px | xl: 1280px | 2xl: 1440px */
+  /* ══════════════════════════════════════════════════
+     Z-INDEX
+     ══════════════════════════════════════════════════ */
+
+  --z-base:      0;
+  --z-raised:    10;
+  --z-nav:       100;
+  --z-overlay:   200;
+  --z-modal:     300;
+  --z-toast:     400;
+  --z-cursor:    9999;
 
 }
 
-/* ══════════════════════════════════════
-   DARK MODE OVERRIDES
-   ══════════════════════════════════════ */
+/* ── Dark mode (explicit) ── */
+[data-theme="dark"],
+.dark {
+  --bg:            var(--obsidian);
+  --bg-alt:        var(--obsidian-soft);
+  --surface:       var(--obsidian-muted);
+  --text:          var(--ivory);
+  --text-secondary: rgba(244, 239, 230, 0.52);
+  --text-tertiary:  rgba(244, 239, 230, 0.32);
+  --border:         rgba(244, 239, 230, 0.08);
+  --border-strong:  rgba(244, 239, 230, 0.18);
+  --cta-bg:        var(--ivory);
+  --cta-text:      var(--obsidian);
+  --cta-bg-hover:  var(--ivory-warm);
+}
 
-@media (prefers-color-scheme: dark) {
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
   :root {
-    --bg-primary:     var(--color-obsidian-950);
-    --bg-secondary:   var(--color-obsidian-900);
-    --bg-tertiary:    var(--color-obsidian-800);
-    --text-primary:   var(--color-pearl-100);
-    --text-secondary: var(--color-obsidian-300);
-    --border-subtle:  var(--color-obsidian-800);
-    --border-default: var(--color-obsidian-700);
+    --dur-snap:      0ms;
+    --dur-micro:     0ms;
+    --dur-base:      0ms;
+    --dur-enter:     0ms;
+    --dur-reveal:    0ms;
+    --dur-slow:      0ms;
+    --dur-cinematic: 0ms;
   }
-}
-
-[data-theme="dark"] {
-  --bg-primary:     var(--color-obsidian-950);
-  --bg-secondary:   var(--color-obsidian-900);
-  --bg-tertiary:    var(--color-obsidian-800);
-  --text-primary:   var(--color-pearl-100);
-  --text-secondary: var(--color-obsidian-300);
-  --border-subtle:  var(--color-obsidian-800);
-  --border-default: var(--color-obsidian-700);
 }

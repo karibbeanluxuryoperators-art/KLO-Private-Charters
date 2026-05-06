@@ -1,0 +1,233 @@
+{
+  "name": "KLO — WhatsApp Concierge (Marcus)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "klo-whatsapp",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-node",
+      "name": "WhatsApp Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "notes": "Meta sends all incoming WhatsApp messages here. Configure this URL in your Meta App Dashboard under Webhooks."
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.entry[0].changes[0].value.messages[0].type }}",
+              "operation": "equals",
+              "value2": "text"
+            }
+          ]
+        }
+      },
+      "id": "filter-text",
+      "name": "Text Messages Only",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [460, 300],
+      "notes": "Filter out non-text messages (images, voice notes, etc.) — handle those separately if needed."
+    },
+    {
+      "parameters": {
+        "functionCode": "// Extract key fields from the WhatsApp webhook payload\nconst entry = items[0].json.entry[0];\nconst change = entry.changes[0];\nconst value = change.value;\nconst message = value.messages[0];\nconst contact = value.contacts?.[0];\n\nconst from = message.from;          // Sender's WhatsApp number\nconst msgId = message.id;            // Unique message ID (use to prevent double-replies)\nconst msgText = message.text.body;   // The actual message text\nconst timestamp = message.timestamp; // Unix timestamp\nconst senderName = contact?.profile?.name || 'Guest';\n\nreturn [{\n  json: {\n    from,\n    msgId,\n    msgText,\n    timestamp,\n    senderName,\n    phoneNumberId: value.metadata.phone_number_id,\n  }\n}];"
+      },
+      "id": "extract-fields",
+      "name": "Extract Message Fields",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [680, 220],
+      "notes": "Pulls out the sender number, message text, and metadata from the WhatsApp payload."
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "key": "=klo_history_{{ $json.from }}",
+        "options": {}
+      },
+      "id": "load-history",
+      "name": "Load Conversation History",
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [900, 220],
+      "notes": "Loads the last N messages for this WhatsApp number from Redis. This gives Marcus conversation memory. If you don't have Redis, replace with a Firestore read node."
+    },
+    {
+      "parameters": {
+        "functionCode": "// Build the messages array for the Claude / OpenAI API call\nconst currentMessage = items[0].json.msgText;\nconst senderName = items[0].json.senderName;\nlet history = [];\n\n// Parse stored history (Redis returns a JSON string)\ntry {\n  const raw = items[0].json.value || '[]';\n  history = JSON.parse(raw);\n} catch(e) {\n  history = [];\n}\n\n// Append the new message\nhistory.push({ role: 'user', content: currentMessage });\n\n// Keep only last 20 messages (10 exchanges) to control token cost\nif (history.length > 20) history = history.slice(-20);\n\nreturn [{\n  json: {\n    ...items[0].json,\n    messages: history,\n    senderName,\n  }\n}];"
+      },
+      "id": "build-messages",
+      "name": "Build Message History",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [1120, 220],
+      "notes": "Prepares the messages array — conversation history + new message — for the AI API."
+    },
+    {
+      "parameters": {
+        "authentication": "headerAuth",
+        "requestMethod": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "headerParameters": {
+          "parameters": [
+            { "name": "x-api-key", "value": "={{ $credentials.anthropicApiKey }}" },
+            { "name": "anthropic-version", "value": "2023-06-01" },
+            { "name": "content-type", "value": "application/json" }
+          ]
+        },
+        "bodyParametersUi": {
+          "parameter": []
+        },
+        "jsonBody": "={\n  \"model\": \"claude-haiku-4-5-20251001\",\n  \"max_tokens\": 512,\n  \"system\": \"[PASTE YOUR CONCIERGE-SYSTEM-PROMPT HERE — the full Marcus prompt from CONCIERGE-SYSTEM-PROMPT.md]\",\n  \"messages\": {{ JSON.stringify($json.messages) }}\n}",
+        "options": {}
+      },
+      "id": "claude-api",
+      "name": "Ask Claude (Marcus)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [1340, 220],
+      "notes": "Calls the Claude API. Uses claude-haiku-4-5 for speed + cost. Swap to claude-sonnet-4-6 for higher quality responses if budget allows. Replace this node with the OpenAI or Gemini node if preferred."
+    },
+    {
+      "parameters": {
+        "functionCode": "// Extract Marcus's reply from the Claude API response\nconst response = items[0].json;\nconst reply = response.content[0].text;\nconst from = items[0].json.from;\nconst phoneNumberId = items[0].json.phoneNumberId;\nlet messages = items[0].json.messages;\n\n// Add Marcus's reply to the history\nmessages.push({ role: 'assistant', content: reply });\n\nreturn [{\n  json: {\n    from,\n    phoneNumberId,\n    reply,\n    messages,\n    senderName: items[0].json.senderName,\n    timestamp: items[0].json.timestamp,\n  }\n}];"
+      },
+      "id": "extract-reply",
+      "name": "Extract Marcus Reply",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [1560, 220]
+    },
+    {
+      "parameters": {
+        "authentication": "headerAuth",
+        "requestMethod": "POST",
+        "url": "=https://graph.facebook.com/v19.0/{{ $json.phoneNumberId }}/messages",
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "=Bearer {{ $credentials.metaAccessToken }}" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "jsonBody": "={\n  \"messaging_product\": \"whatsapp\",\n  \"to\": \"{{ $json.from }}\",\n  \"type\": \"text\",\n  \"text\": {\n    \"body\": {{ JSON.stringify($json.reply) }}\n  }\n}",
+        "options": {}
+      },
+      "id": "send-whatsapp",
+      "name": "Send WhatsApp Reply",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [1780, 220],
+      "notes": "Sends Marcus's reply back via the Meta WhatsApp Cloud API."
+    },
+    {
+      "parameters": {
+        "operation": "set",
+        "key": "=klo_history_{{ $json.from }}",
+        "value": "={{ JSON.stringify($json.messages) }}",
+        "expire": true,
+        "ttl": 604800,
+        "options": {}
+      },
+      "id": "save-history",
+      "name": "Save Conversation History",
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [2000, 220],
+      "notes": "Saves the updated conversation history to Redis with a 7-day TTL. Replace with Firestore if you're using Firebase."
+    },
+    {
+      "parameters": {
+        "functionCode": "// Log inquiry to Firebase Firestore (or your database of choice)\n// This node calls your Firebase REST API to store the lead\n\nconst data = {\n  from: items[0].json.from,\n  senderName: items[0].json.senderName,\n  lastMessage: items[0].json.reply,\n  timestamp: new Date().toISOString(),\n  source: 'whatsapp',\n  status: 'active',\n};\n\n// Check if the message history suggests an enquiry was captured\nconst messages = items[0].json.messages || [];\nconst allText = messages.map(m => m.content).join(' ').toLowerCase();\nconst likelyEnquiry = allText.includes('proposal') || allText.includes('dates') || allText.includes('guests') || allText.includes('charter');\n\ndata.enquiryLikely = likelyEnquiry;\n\nreturn [{ json: data }];"
+      },
+      "id": "prepare-log",
+      "name": "Prepare Firebase Log",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [2000, 380],
+      "notes": "Prepares the lead data for Firebase. Connect this to an HTTP Request node pointing at your Firebase REST endpoint."
+    },
+    {
+      "parameters": {
+        "authentication": "headerAuth",
+        "requestMethod": "POST",
+        "url": "=https://firestore.googleapis.com/v1/projects/YOUR_PROJECT_ID/databases/(default)/documents/whatsapp_leads",
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "=Bearer {{ $credentials.firebaseToken }}" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "jsonBody": "={\n  \"fields\": {\n    \"from\": { \"stringValue\": \"{{ $json.from }}\" },\n    \"senderName\": { \"stringValue\": \"{{ $json.senderName }}\" },\n    \"lastMessage\": { \"stringValue\": {{ JSON.stringify($json.lastMessage) }} },\n    \"timestamp\": { \"stringValue\": \"{{ $json.timestamp }}\" },\n    \"source\": { \"stringValue\": \"whatsapp\" },\n    \"status\": { \"stringValue\": \"active\" },\n    \"enquiryLikely\": { \"booleanValue\": {{ $json.enquiryLikely }} }\n  }\n}",
+        "options": {}
+      },
+      "id": "log-firebase",
+      "name": "Log to Firebase",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [2220, 380],
+      "notes": "Replace YOUR_PROJECT_ID with your actual Firebase project ID. This creates a new document in the whatsapp_leads collection."
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{ \"status\": \"ok\" }",
+        "options": {}
+      },
+      "id": "respond-webhook",
+      "name": "Respond to Meta",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [460, 440],
+      "notes": "Meta requires a 200 OK response within 15 seconds. This sends it immediately regardless of processing status."
+    }
+  ],
+  "connections": {
+    "WhatsApp Webhook": {
+      "main": [
+        [
+          { "node": "Text Messages Only", "type": "main", "index": 0 },
+          { "node": "Respond to Meta", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Text Messages Only": {
+      "main": [
+        [{ "node": "Extract Message Fields", "type": "main", "index": 0 }],
+        []
+      ]
+    },
+    "Extract Message Fields": {
+      "main": [[{ "node": "Load Conversation History", "type": "main", "index": 0 }]]
+    },
+    "Load Conversation History": {
+      "main": [[{ "node": "Build Message History", "type": "main", "index": 0 }]]
+    },
+    "Build Message History": {
+      "main": [[{ "node": "Ask Claude (Marcus)", "type": "main", "index": 0 }]]
+    },
+    "Ask Claude (Marcus)": {
+      "main": [[{ "node": "Extract Marcus Reply", "type": "main", "index": 0 }]]
+    },
+    "Extract Marcus Reply": {
+      "main": [
+        [
+          { "node": "Send WhatsApp Reply", "type": "main", "index": 0 },
+          { "node": "Save Conversation History", "type": "main", "index": 0 },
+          { "node": "Prepare Firebase Log", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Prepare Firebase Log": {
+      "main": [[{ "node": "Log to Firebase", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

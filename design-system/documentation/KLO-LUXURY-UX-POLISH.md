@@ -1,326 +1,257 @@
-# KLO Private Charters — Luxury UX Polish Guide
-## Caribbean Luxury Operators · Design System v1.0
+# KLO Private Charters — Ultra-Luxury UX Standard
+## v2.0 · The Definitive Edition
 
-> *"Every interaction should feel like a luxury concierge service, not a self-serve booking."*
+> *"The best luxury is invisible. The guest never notices the design — they only feel the experience."*
 
----
-
-## Executive Summary
-
-Transform KLO Private Charters into a premium, high-end luxury experience through sophisticated UX/UI refinement, elegant typography, seamless interactions, and exclusive brand positioning. This guide is the single source of truth for all design and interaction decisions.
+Reference tier: **Rolls-Royce Bespoke · NetJets · Chanel · Cartier · Six Senses**
 
 ---
 
-## 1. Design System — Luxury Brand Identity
+## The Governing Principle
 
-### Color Palette
+Every screen must pass one question before it ships:
+
+> **"Would a guest who just paid $80,000 for a charter feel embarrassed showing this to a friend?"**
+
+If there is any doubt — it goes back.
+
+---
+
+## 1. Palette — Three Colors
+
+Ultra-luxury brands are defined by their restraint. Rolls-Royce uses black, white, and silver. Chanel uses black and white. Cartier uses red and white.
+
+KLO uses three:
+
+| Role | Token | Value | Philosophy |
+|------|-------|-------|------------|
+| Ground | `--obsidian` | `#0C0C0C` | Not pure black — black is cheap. This has warmth. |
+| Field | `--ivory` | `#F4EFE6` | Not white — white is sterile. Ivory says *aged linen*. |
+| Accent | `--oro` | `#B8963E` | Not bright gold — this is antique, patinated, old money. |
+
+**The 10% Rule:** Oro appears on no more than 10% of any screen. It marks the important thing. One important thing per screen.
+
+**What was removed and why:**
+- Teal/turquoise → too Caribbean resort, not enough ultra-private
+- Navy blue → too corporate aviation, too generic
+- Multiple grays → replaced by opacity variants of Obsidian
+- Pearl variations → replaced by single Ivory tone
+
+---
+
+## 2. Typography — The Display Serif Is Everything
+
+The single most important design decision for ultra-lux is the headline typeface. Every other choice follows from it.
+
+**The KLO Display: Cormorant Garamond**
 
 ```css
---color-gold:         #D4AF37;  /* Primary luxury accent */
---color-navy:         #0A1128;  /* Trust, sophistication */
---color-charcoal:     #1A1A1A;  /* Elegance, dark text */
---color-pearl:        #F8F7F3;  /* Premium background */
---color-teal:         #1B7B7B;  /* Exclusive, refined */
---color-gray:         #4A4A4A;  /* Secondary text */
+font-family: 'Cormorant Garamond', Didot, 'Bodoni MT', Georgia, serif;
+font-weight: 300;         /* Light — never Bold for headlines */
+letter-spacing: -0.04em;  /* Tight tracking on large display */
+line-height: 1.05;        /* Cinematic — almost no air between lines */
 ```
 
-**Rules:**
-- Gold is an accent only — maximum 15% of any screen composition
-- Navy dominates hero sections and overlays
-- Pearl replaces pure white on all surfaces (never #FFFFFF)
-- Teal used exclusively for interactive and confirmation states
+Why Cormorant Garamond:
+- High contrast between thick and thin strokes (the Didot quality, free)
+- Extremely elegant at 88–144px
+- Used by luxury houses globally because it reads as *earned*
+- The hairline strokes read as restraint — you earn the right to use a font this delicate
 
-### Typography Hierarchy
+**Scale in practice:**
 
-| Role | Font | Size | Weight | Notes |
-|------|------|------|--------|-------|
-| Headlines | Playfair Display | 52–72px | Bold | Hero titles, section headers |
-| Subheads | Playfair Display | 32–48px | Medium | Feature headings |
-| Body Copy | Inter / Outfit | 16px | Regular | Line-height 1.8 |
-| Captions | Inter | 12px | Regular | Uppercase, 1px letter-spacing |
+| Use | Size | Weight | Tracking |
+|-----|------|--------|----------|
+| Hero headline | 112–144px | 300 | -0.04em |
+| Section title | 64–88px | 300 | -0.03em |
+| Card title | 36–48px | 400 | -0.02em |
+| Eyebrow labels | 11–12px | 400 | 0.40em (UPPERCASE) |
+| Body copy | 16–18px | 300 | 0 |
+| Fine print | 12px | 400 | 0.05em |
 
-**Load from Google Fonts:**
-```html
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+**Never:**
+- Bold or Black weight for display — this is a private charter, not a sale
+- Mix a third typeface into any single screen
+- Set body copy below 16px
+- Use all-caps on anything larger than 14px
+
+---
+
+## 3. Space — The Most Expensive Material
+
+In ultra-luxury, whitespace is not empty space. It is the primary luxury signal.
+
+**Section padding (desktop):**
+- Hero: 256px top, 192px bottom
+- Standard sections: 160px top and bottom
+- Compact (stats, testimonials): 96px top and bottom
+
+**Mobile:** Divide by 2. Still generous. Never collapse below 48px vertical padding.
+
+**Content max-width:** 1100px. Tighter than most sites. Lines of body text should be ≤ 68 characters. Long line lengths are for newspapers, not private aviation.
+
+**The silence test:** After designing a section, reduce all content by 20% — can it breathe more? Usually yes.
+
+---
+
+## 4. Shape Language — Sharp, Architectural, Deliberate
+
+Ultra-lux brands use zero or near-zero border radius. Sharp corners are:
+- Architectural (refer to Cartier jewellery cases)
+- Deliberate (nothing happened by accident)
+- Authoritative (rounded corners say approachable, sharp corners say certain)
+
+```
+Cards:    border-radius: 0
+Buttons:  border-radius: 0   (or 1px — the merest softening)
+Inputs:   border-radius: 0
+Modals:   border-radius: 0
+Images:   border-radius: 0
 ```
 
-### Spacing & Layout
-
-- Minimum section padding: 40px
-- Preferred section margin: 80–120px between major sections
-- Maximum content width: 1200px
-- Golden ratio proportions (1:1.618) for card and layout dimensions
-- Mobile: halve all vertical spacing values
+The only exception: avatar images and circular indicators (booking steps).
 
 ---
 
-## 2. UX Improvements — By Page / Feature
+## 5. Shadows — Barely There
 
-### 2.1 Homepage Hero Section
+Ultra-lux doesn't need drop shadows to communicate elevation. If your layout needs heavy shadows to feel three-dimensional, the layout is the problem.
 
-**Current → Luxury Enhancement**
+**Permitted shadows:**
+- `--shadow-hair` — a single 1px hairline separator
+- `--shadow-subtle` — for floating elements (nav on scroll)
+- `--shadow-card` — barely visible card lift, only on hover
 
-| Before | After |
-|--------|-------|
-| Generic greeting | "Welcome back, [Name]" or "Exclusive Access" |
-| Abrupt CTA buttons | 48px+ height, scale(1.05) hover, 300ms ease |
-| Basic background | 8K aircraft photography + parallax + `rgba(10,17,40,0.4)` overlay |
-
-**Hero Implementation Notes:**
-- Smooth fade-in on scroll using Intersection Observer (never CSS `onload`)
-- Gold accent on button hover with `box-shadow: 0 8px 32px rgba(212,175,55,0.3)`
-- Subtitle text in Inter Light, max 560px wide, centered
-
-### 2.2 Booking / Charter Flow
-
-**Goal:** Effortless and exclusive — no friction, no anxiety.
-
-**Step Indicator:**
-- Circular progress: gold fill on complete, pearl on pending
-- Descriptive labels only — no step numbers
-- Labels: "Departure" → "Details" → "Preferences" → "Confirmation"
-- Animated slide-up between steps (250ms luxury ease)
-
-**Form Inputs:**
-- Floating labels — animate up on focus, never overlay
-- Thin bottom border only (not full box border)
-- Focus state: gold underline with `box-shadow: 0 2px 0 #D4AF37`
-- Placeholder text: 70% opacity, never replaces a label
-- All fields: 40–52px height (comfortable touch targets)
-
-**Date & Time Pickers:**
-- Custom calendar UI: gold highlight for selected date
-- Elegant dropdown for time (no spinners)
-- Preset shortcuts: "Next Week," "Next Month," "Custom"
-
-**Aircraft Selection:**
-- Large card layout with hi-res images
-- Hover: 5px translateY + shadow expansion (300ms)
-- Specs as editorial typography, not a data table
-- Status badges: "Recommended" or "Most Popular" (gold background)
-
-**Pricing Display:**
-- Full cost breakdown — no hidden fees
-- Price shown in large Playfair Display, gold color
-- Value-added inclusions listed: crew, catering, ground transport
-
-### 2.3 Navigation
-
-**Desktop:**
-- Max height: 70px sticky header
-- Layout: Logo (left) → Nav links (center) → User menu (right)
-- Links: Inter, 13px, uppercase, 0.1em letter-spacing
-- Hover: gold underline, 2px, 300ms ease-in-out
-- Background: `backdrop-filter: blur(20px)` on scroll
-
-**Nav Items:** Charters · Fleet · About · Contact
-
-**Mobile Menu:**
-- Full-screen overlay, deep navy background
-- Slides in from right with smooth easing
-- Font: Playfair Display, 24px, line-height 2
-- Close button: top-right, 40×40px touch target
-
-### 2.4 Fleet Showcase
-
-- Responsive grid: 3 columns desktop, 2 tablet, 1 mobile
-- Hover: `scale(1.08)` on image + overlay with "View Details" CTA
-- Elegant specs typography below each image
-- Price per hour in gold, prominent placement
-
-### 2.5 Chat Experience (AI Integration)
-
-**Message Design:**
-- User messages: Right-aligned, gold background (`#D4AF37` at 15% opacity)
-- AI responses: Left-aligned, pearl background with subtle border
-- Typing indicator: Three animated dots, 600ms stagger pulse
-
-**Chat Context Sidebar:**
-- Always-visible panel: selected flight details
-- Dark navy background, gold accent typography
-- Quick-action buttons: "Confirm Booking," "Need Changes," "More Options"
-
-**Input Field:**
-- Minimal visual weight
-- Gold border on focus
-- Send button: gold icon, 44×44px touch target
-
-### 2.6 Confirmation / Success Pages
-
-- Animated checkmark SVG on page load (draws in, 800ms)
-- Headline: "Your charter awaits." (Playfair Display, 48px)
-- Booking details in clean typographic layout (not a data grid)
-- Primary CTA: "View Itinerary"
-- Secondary CTA: "Need Assistance?" (links to chat)
+**Forbidden:**
+- Dark, dramatic drop shadows
+- Colored glows on standard elements
+- `box-shadow` with blur > 48px unless it's `--shadow-modal`
 
 ---
 
-## 3. Micro-Interactions & Animations
+## 6. Motion — The Rolls-Royce Standard
 
-### Timing Reference
+When a Rolls-Royce door closes, it doesn't slam. It settles. That is the sensation every animation should produce.
 
-| Interaction | Duration | Easing |
-|-------------|----------|--------|
-| Page fade-in | 300ms | ease-out |
-| Button press | 150ms | cubic-bezier(0.68, -0.55, 0.265, 1.55) |
-| Hover states | 300ms | ease-in-out |
-| Form error shake | 200ms | ease-in-out |
-| Success pulse | 800ms | ease-out |
-| Modal open | 250ms | cubic-bezier(0.34, 1.56, 0.64, 1) |
-| Page transition | 200ms | ease-in-out |
+**Duration floor:** Nothing interactive animates in less than 380ms. Below that, it feels like a web app, not a charter.
 
-### Scroll Animations
-- Section headers: fade-in as they enter viewport (Intersection Observer, 15% threshold)
-- Cards: stagger-load with 50ms delay between each
-- Hero image: subtle parallax at 30% of scroll speed
-- Scroll progress indicator: thin gold line, fixed top of page
+**The KLO ease:** `cubic-bezier(0.16, 1, 0.3, 1)`
+- Sharp departure (things respond immediately)
+- Very long deceleration tail (they arrive with inevitability)
+- Never use bounce. Never use spring on transactional UI.
 
-### Button States
-```css
-/* Default → Hover → Active */
-button:hover  { transform: scale(1.05); box-shadow: 0 8px 32px rgba(212,175,55,0.25); }
-button:active { transform: scale(0.95); transition-duration: 80ms; }
-button:disabled { opacity: 0.5; cursor: not-allowed; }
-```
+**Scroll reveals:** 900ms, KLO ease, translateY(40px) → 0. Stagger grid items at 120ms intervals. Maximum 5 items in any stagger group — don't make guests wait.
+
+**Page transitions:** Cross-fade, 600ms. The next page appears; the last page doesn't "fly away."
+
+**What was slowed down vs. v1:**
+- Hover: 200ms → 380ms
+- Card lift: 300ms → 600ms
+- Scroll reveals: 400ms → 900ms
+- Page transition: 200ms → 600ms
 
 ---
 
-## 4. Technical Standards
+## 7. Copy — The Register of Absolute Confidence
 
-### Performance Targets
+Ultra-luxury copy does not ask. It does not persuade. It informs, with total certainty that the reader is already in.
 
-| Metric | Target |
-|--------|--------|
-| Page load time | < 2.5s |
-| LCP | < 2.0s |
-| CLS | < 0.05 |
-| Lighthouse accessibility | 95+ / 100 |
-| Time-to-book reduction | 30% vs. baseline |
+### The Voice Test
+Read your copy out loud. Imagine you are a 60-year-old Barbadian in a white linen jacket, standing on a dock, who has been arranging private voyages for 30 years. Would he say this? If not, rewrite it.
 
-### Image Optimization
-- Format: AVIF > WebP > JPEG fallback
-- Lazy load all below-fold images (Intersection Observer)
-- Provide `srcset` at 1x, 2x, 3x
-- Hero images: preload via `<link rel="preload">`
-- Hero video: muted, loop, max 8MB, static fallback for reduced-motion
+### Transformations
 
-### CSS Architecture
-- Use CSS custom properties for all tokens (see `DESIGN-TOKENS.css`)
-- No hardcoded color, spacing, or font values in component files
-- Route-based code splitting (not component-level)
+| Generic | KLO Ultra-Lux |
+|---------|--------------|
+| "Book a Charter" | "Begin Your Voyage" |
+| "Select Aircraft" | "Choose Your Vessel" |
+| "Continue" | "Proceed" |
+| "Thank you for your booking" | "Your charter is arranged." |
+| "Loading..." | *(nothing — show a progress line)* |
+| "Error — please try again" | "One moment. We're attending to this." |
+| "Submit" | "Send Enquiry" |
+| "Sign Up" | "Request Access" |
+| "Login" | "Enter" |
+| "Contact Us" | "Speak with an Advisor" |
+| "Learn More" | *(remove — show more directly)* |
+| "View Details" | "Explore" |
+| "Add to Cart" | *(never exists)* |
 
-### Accessibility (WCAG 2.1 AA)
-- All text contrast: 4.5:1 minimum (target 7:1)
-- Large text: 3:1 minimum
-- Touch targets: 48×48px minimum
-- Focus visible on all interactive elements (gold ring)
-- Keyboard navigable: tab, enter, escape, arrow keys
-- Semantic HTML: `<nav>`, `<main>`, `<article>`, `<section>` as appropriate
-- ARIA labels where visual context is insufficient
-- Never rely on color alone to convey information
+### Copy length
+- Hero headline: 3–6 words. Never a sentence.
+- Hero subhead: One sentence. Maximum 12 words.
+- Body paragraphs: Maximum 4 sentences. Then a new paragraph.
+- CTA labels: 1–3 words.
 
 ---
 
-## 5. Component Checklist
+## 8. Navigation
 
-### Buttons
-- [ ] Primary: gold background, dark text, 4px radius
-- [ ] Secondary: gold outline, transparent background
-- [ ] Tertiary: text only, gold on hover
-- [ ] Sizes: Small (32px), Medium (40px), Large (48px)
-- [ ] All states: Default, Hover, Active, Disabled, Loading (spinner)
+**Desktop header:**
+- Max height: 64px (tighter than before — less visual weight)
+- Logo: wordmark only, left-aligned, 100px wide
+- Nav: center, 5 items max, Inter 12px, `0.30em` letter-spacing, uppercase
+- Right: Single CTA — "Begin Your Voyage" or just a thin gold horizontal line + "Enquire"
+- Background: transparent on hero, `rgba(12,12,12,0.80) + blur(24px)` on scroll
+- On scroll: add a 1px Oro bottom border (`--border-accent`) — ultra-subtle brand signature
 
-### Forms
-- [ ] Floating labels (animate up on focus)
-- [ ] Gold focus states (bottom border + glow)
-- [ ] Error states with shake animation + icon
-- [ ] Success states with animated checkmark
-- [ ] Helper / hint text in subtle gray
-- [ ] Required field indicator (gold asterisk)
-
-### Cards
-- [ ] Shadow: `0 2px 8px rgba(0,0,0,0.08)`
-- [ ] Radius: 8px
-- [ ] Hover: lift + shadow expansion
-- [ ] No visible border (unless needed for section division)
-- [ ] Featured variant: gold border accent
-
-### Typography
-- [ ] H1: 52px, Playfair Display, Bold
-- [ ] H2: 36px, Playfair Display, Medium
-- [ ] H3: 24px, Playfair Display, Medium
-- [ ] Body: 16px, Inter, Regular, 1.8 line-height
-- [ ] Caption: 12px, Inter, Uppercase, 1px letter-spacing
+**Mobile:**
+- Full-screen take-over, Obsidian background
+- Cormorant Garamond headlines, 48px, one per line
+- 3-second stagger animation — they arrive one at a time
+- Logo stays top-left, close target top-right (48×48px)
 
 ---
 
-## 6. Visual Hierarchy
+## 9. Forms — The Concierge Intake
 
-### Information Priority
-1. **Primary:** Aircraft/vessel image, route, date
-2. **Secondary:** Price, amenities, capacity
-3. **Tertiary:** Technical specs (range, speed, crew)
-4. **Quaternary:** Detailed descriptions, fine print
+The charter inquiry form is not a form. It is the first concierge interaction. Design it that way.
 
-### Sizing Reference
-| Element | Size |
-|---------|------|
-| Primary CTA | 48px height |
-| Secondary CTA | 40px height |
-| Form fields | 40–52px height |
-| Card min-height | 200px |
-| Section padding | 40–60px top/bottom |
-| Section margin | 80–120px |
+**Layout rule:** One field visible at a time on mobile. On desktop, a maximum of two fields per row.
 
----
+**Input style:**
+- No border box. Bottom border only: `border-bottom: 1px solid var(--border)`
+- On focus: bottom border becomes Oro: `border-bottom-color: var(--oro)`
+- Background: transparent (inherits page surface)
+- Label: above, 11px, uppercase, `0.30em` tracking
+- Height: 56px (more generous than before)
+- No border-radius
 
-## 7. Brand Voice & Copy
-
-### Tone
-- **Confident** — we know this world
-- **Refined** — sophisticated, never stuffy
-- **Helpful** — here to assist, not push
-- **Exclusive** — this experience is special
-
-### Copy Transformations
-| ❌ Generic | ✅ Luxury |
-|------------|----------|
-| "Book a Charter" | "Reserve Your Departure" |
-| "Select Aircraft" | "Choose Your Cabin" |
-| "Continue" | "Proceed to Details" |
-| "Thank you" | "Your charter awaits" |
-| "Loading..." | "Preparing your details…" |
-| "Error" | "One moment — let's sort this" |
-| "Submit" | "Confirm My Charter" |
+**Messaging:**
+- Placeholder: light, helpful, disappears on first keystroke
+- Error: below field, 12px, Obsidian at 50% opacity + a em dash: "— Please enter a valid date"
+- Never red. Error copy in the same family as body copy, slightly reduced.
 
 ---
 
-## 8. Brand Reference Points
+## 10. The Imagery Standard
 
-KLO should feel like:
-- ✈️ **Private aviation luxury** — NetJets, VistaJet
-- 🏨 **Five-star hospitality** — seamless, anticipatory
-- 💎 **Premium jewelry** — refined aesthetic, never gaudy
-- 🚗 **Luxury automotive** — performance + elegance
+Photography is 70% of ultra-luxury perception. The design system supports the photography — it does not compete with it.
 
-KLO should NOT feel like:
-- ❌ Overly ornate or cluttered
-- ❌ Too much gold (accent only, max 15%)
-- ❌ Generic SaaS or travel booking UI
-- ❌ Heavy, slow animations
+**Direction for all hero photography:**
+- Time of day: golden hour or blue hour. Never midday.
+- Water: always present. Must show the quality of light on water.
+- People: if present, hands only, or turned away. Never faces.
+- Color grade: lifted blacks (not crushed), slightly warm, desaturated highlights.
+- Aspect ratio: 16:9 for full-bleed heroes. Never crop tighter than 4:3 for cards.
 
----
+**Overlay rule:** Dark hero images: no overlay needed. Light/bright images: `rgba(12,12,12,0.45)` overlay. Never more — it buries the photography, which is why they came.
 
-## 9. Next Steps
-
-1. Review this guide with design and development team
-2. Set up design tokens in Figma (colors, spacing, typography)
-3. Build component library using `COMPONENT-EXAMPLES.tsx` as reference
-4. A/B test key conversion flows (booking, chat, confirmation)
-5. Gather feedback from target audience (first 20 users)
-6. Iterate on real user data — booking completion rate is the primary KPI
+**Image sizing:** All images declare explicit width and height in HTML. No layout shift, ever. Cumulative Layout Shift of 0 is non-negotiable.
 
 ---
 
-*KLO Design System — Luxury UX Polish Guide*
-*Version 1.0 | Last updated: 2026*
+## 11. The 10-Second Test
+
+Before shipping any screen, hand it to someone who has never seen it and give them 10 seconds.
+
+Ask: "What does this company do? What do they stand for?"
+
+If the answer includes the words *"expensive," "private," "exclusive," or "Caribbean"* without any prompting — the screen passes.
+
+If they say *"travel booking"* or *"nice website"* — it goes back.
+
+---
+
+*KLO Design System — Ultra-Luxury UX Standard*
+*Version 2.0 | 2026 | For internal use only*
