@@ -96,7 +96,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         'X-Title': 'KLO Private Charters',
       },
       body: JSON.stringify({
-        model: 'deepseek/deepseek-chat-v3-0324:free',
+        model: 'meta-llama/llama-3.3-70b-instruct:free',
         messages,
         temperature: 0.6,
       }),
