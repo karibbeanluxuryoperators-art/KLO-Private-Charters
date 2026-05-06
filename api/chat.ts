@@ -96,7 +96,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         'X-Title': 'KLO Private Charters',
       },
       body: JSON.stringify({
-        model: 'meta-llama/llama-3.3-70b-instruct:free',
+        model: 'openai/gpt-oss-20b:free',
         messages,
         temperature: 0.6,
       }),
