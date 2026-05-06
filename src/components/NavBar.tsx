@@ -30,10 +30,12 @@ export default function NavBar() {
         <div className="max-w-[1100px] mx-auto h-full px-6 flex items-center justify-between">
           {/* Logo */}
           <a href="#" className="flex flex-col select-none">
-            <span className="klo-display text-[22px] text-white tracking-[-0.02em]">
-              K<span className="oro italic">L</span>O
+            <span className="klo-display text-white" style={{ fontSize: '22px', letterSpacing: '-0.02em' }}>
+              <span style={{ opacity: 0.9 }}>K</span>
+              <span className="oro italic" style={{ marginLeft: '-0.06em', marginRight: '-0.03em' }}>L</span>
+              <span style={{ opacity: 0.9 }}>O</span>
             </span>
-            <span className="klo-label text-[8px] text-white/30" style={{ letterSpacing: '0.25em' }}>
+            <span className="klo-label text-white/25" style={{ fontSize: '8px', letterSpacing: '0.22em' }}>
               Private Charters
             </span>
           </a>
@@ -83,7 +85,11 @@ export default function NavBar() {
           style={{ background: '#0A0A0A' }}
         >
           <div className="flex justify-between items-center px-6 h-16">
-            <span className="klo-display text-[22px] text-white">K<span className="oro italic">L</span>O</span>
+            <span className="klo-display text-white" style={{ fontSize: '22px', letterSpacing: '-0.02em' }}>
+              <span style={{ opacity: 0.9 }}>K</span>
+              <span className="oro italic" style={{ marginLeft: '-0.06em', marginRight: '-0.03em' }}>L</span>
+              <span style={{ opacity: 0.9 }}>O</span>
+            </span>
             <button
               onClick={() => setMenuOpen(false)}
               className="text-white/40 hover:text-white text-2xl transition-colors"
