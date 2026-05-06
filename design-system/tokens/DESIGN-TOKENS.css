@@ -1,0 +1,313 @@
+/**
+ * KLO Private Charters — Design Tokens
+ * Caribbean Luxury Operators Design System v1.0
+ * ─────────────────────────────────────────────
+ * Single source of truth for all visual values.
+ * Import this file globally before any component styles.
+ */
+
+:root {
+
+  /* ══════════════════════════════════════
+     COLOR PALETTE
+     ══════════════════════════════════════ */
+
+  /* Brand — Deep Sea */
+  --color-deep-sea-950: #020B14;
+  --color-deep-sea-900: #051A2E;
+  --color-deep-sea-800: #0A2E4F;
+  --color-deep-sea-700: #0F4270;
+  --color-deep-sea-600: #155691;
+  --color-deep-sea-500: #1A6AB2;
+  --color-deep-sea-400: #3E88C8;
+  --color-deep-sea-300: #6AA7D9;
+  --color-deep-sea-200: #9DC6EA;
+  --color-deep-sea-100: #D0E5F6;
+  --color-deep-sea-50:  #EBF4FB;
+
+  /* Brand — Caribbean Turquoise */
+  --color-turquoise-950: #00120F;
+  --color-turquoise-900: #00231E;
+  --color-turquoise-800: #004640;
+  --color-turquoise-700: #006960;
+  --color-turquoise-600: #008C80;
+  --color-turquoise-500: #00AF9F;
+  --color-turquoise-400: #00C9B7;
+  --color-turquoise-300: #33D9C9;
+  --color-turquoise-200: #80E8DF;
+  --color-turquoise-100: #CCF6F3;
+  --color-turquoise-50:  #E5FAF9;
+
+  /* Brand — Champagne Gold */
+  --color-gold-950: #1A1200;
+  --color-gold-900: #332400;
+  --color-gold-800: #664800;
+  --color-gold-700: #996C00;
+  --color-gold-600: #CC9000;
+  --color-gold-500: #FFB400;
+  --color-gold-400: #FFC333;
+  --color-gold-300: #FFD266;
+  --color-gold-200: #FFE199;
+  --color-gold-100: #FFF0CC;
+  --color-gold-50:  #FFF8E5;
+
+  /* Brand — Pearl White */
+  --color-pearl-100: #FDFCFA;
+  --color-pearl-200: #FAF8F4;
+  --color-pearl-300: #F5F1EB;
+  --color-pearl-400: #EDE7DC;
+  --color-pearl-500: #E0D6C8;
+
+  /* Neutral — Obsidian */
+  --color-obsidian-950: #080808;
+  --color-obsidian-900: #121212;
+  --color-obsidian-800: #1E1E1E;
+  --color-obsidian-700: #2C2C2C;
+  --color-obsidian-600: #3D3D3D;
+  --color-obsidian-500: #525252;
+  --color-obsidian-400: #737373;
+  --color-obsidian-300: #9E9E9E;
+  --color-obsidian-200: #C4C4C4;
+  --color-obsidian-100: #E8E8E8;
+  --color-obsidian-50:  #F5F5F5;
+
+  /* Semantic Colors */
+  --color-success-500: #1A9E6A;
+  --color-success-100: #D1F0E4;
+  --color-warning-500: #E08C00;
+  --color-warning-100: #FFF0CC;
+  --color-error-500:   #CC2B2B;
+  --color-error-100:   #FADADB;
+  --color-info-500:    #1A6AB2;
+  --color-info-100:    #D0E5F6;
+
+  /* ══════════════════════════════════════
+     SEMANTIC COLOR ASSIGNMENTS
+     ══════════════════════════════════════ */
+
+  /* Backgrounds */
+  --bg-primary:          var(--color-pearl-100);
+  --bg-secondary:        var(--color-pearl-200);
+  --bg-tertiary:         var(--color-pearl-300);
+  --bg-inverse:          var(--color-deep-sea-900);
+  --bg-overlay:          rgba(2, 11, 20, 0.72);
+  --bg-glass:            rgba(255, 255, 255, 0.08);
+  --bg-glass-dark:       rgba(5, 26, 46, 0.85);
+
+  /* Text */
+  --text-primary:        var(--color-obsidian-900);
+  --text-secondary:      var(--color-obsidian-600);
+  --text-tertiary:       var(--color-obsidian-400);
+  --text-disabled:       var(--color-obsidian-300);
+  --text-inverse:        var(--color-pearl-100);
+  --text-brand:          var(--color-deep-sea-700);
+  --text-accent:         var(--color-gold-600);
+  --text-link:           var(--color-turquoise-600);
+  --text-link-hover:     var(--color-turquoise-700);
+
+  /* Borders */
+  --border-subtle:       var(--color-obsidian-100);
+  --border-default:      var(--color-obsidian-200);
+  --border-strong:       var(--color-obsidian-400);
+  --border-brand:        var(--color-deep-sea-500);
+  --border-accent:       var(--color-gold-400);
+  --border-glass:        rgba(255, 255, 255, 0.12);
+
+  /* Interactive */
+  --interactive-primary:         var(--color-deep-sea-700);
+  --interactive-primary-hover:   var(--color-deep-sea-800);
+  --interactive-primary-active:  var(--color-deep-sea-900);
+  --interactive-accent:          var(--color-gold-500);
+  --interactive-accent-hover:    var(--color-gold-400);
+  --interactive-accent-active:   var(--color-gold-600);
+
+  /* ══════════════════════════════════════
+     TYPOGRAPHY
+     ══════════════════════════════════════ */
+
+  /* Font Families */
+  --font-display:   'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+  --font-body:      'Inter', 'Helvetica Neue', Arial, sans-serif;
+  --font-accent:    'Cinzel', 'Trajan Pro', Georgia, serif;
+  --font-mono:      'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Font Sizes — Major Third Scale (1.25) */
+  --text-xs:    0.64rem;   /* 10.24px */
+  --text-sm:    0.8rem;    /* 12.8px  */
+  --text-base:  1rem;      /* 16px    */
+  --text-md:    1.25rem;   /* 20px    */
+  --text-lg:    1.563rem;  /* 25px    */
+  --text-xl:    1.953rem;  /* 31.25px */
+  --text-2xl:   2.441rem;  /* 39px    */
+  --text-3xl:   3.052rem;  /* 48.8px  */
+  --text-4xl:   3.815rem;  /* 61px    */
+  --text-5xl:   4.768rem;  /* 76.3px  */
+  --text-6xl:   5.96rem;   /* 95.4px  */
+
+  /* Font Weights */
+  --weight-thin:       100;
+  --weight-light:      300;
+  --weight-regular:    400;
+  --weight-medium:     500;
+  --weight-semibold:   600;
+  --weight-bold:       700;
+  --weight-extrabold:  800;
+
+  /* Line Heights */
+  --leading-none:    1;
+  --leading-tight:   1.2;
+  --leading-snug:    1.35;
+  --leading-normal:  1.5;
+  --leading-relaxed: 1.65;
+  --leading-loose:   1.85;
+
+  /* Letter Spacing */
+  --tracking-tightest: -0.04em;
+  --tracking-tight:    -0.02em;
+  --tracking-normal:    0;
+  --tracking-wide:      0.05em;
+  --tracking-wider:     0.1em;
+  --tracking-widest:    0.2em;
+  --tracking-luxury:    0.35em;  /* KLO signature wide-spaced caps */
+
+  /* ══════════════════════════════════════
+     SPACING — Base 8 Grid
+     ══════════════════════════════════════ */
+
+  --space-0:    0;
+  --space-1:    0.25rem;   /* 4px  */
+  --space-2:    0.5rem;    /* 8px  */
+  --space-3:    0.75rem;   /* 12px */
+  --space-4:    1rem;      /* 16px */
+  --space-5:    1.25rem;   /* 20px */
+  --space-6:    1.5rem;    /* 24px */
+  --space-8:    2rem;      /* 32px */
+  --space-10:   2.5rem;    /* 40px */
+  --space-12:   3rem;      /* 48px */
+  --space-16:   4rem;      /* 64px */
+  --space-20:   5rem;      /* 80px */
+  --space-24:   6rem;      /* 96px */
+  --space-32:   8rem;      /* 128px */
+  --space-40:   10rem;     /* 160px */
+  --space-48:   12rem;     /* 192px */
+  --space-64:   16rem;     /* 256px */
+
+  /* Layout Containers */
+  --container-sm:   640px;
+  --container-md:   768px;
+  --container-lg:   1024px;
+  --container-xl:   1280px;
+  --container-2xl:  1440px;
+  --container-3xl:  1600px;
+
+  /* ══════════════════════════════════════
+     BORDER RADIUS
+     ══════════════════════════════════════ */
+
+  --radius-none:   0;
+  --radius-xs:     2px;
+  --radius-sm:     4px;
+  --radius-md:     8px;
+  --radius-lg:     12px;
+  --radius-xl:     16px;
+  --radius-2xl:    24px;
+  --radius-3xl:    32px;
+  --radius-full:   9999px;
+
+  /* ══════════════════════════════════════
+     SHADOWS — Luxury Depth System
+     ══════════════════════════════════════ */
+
+  --shadow-xs:      0 1px 2px rgba(2, 11, 20, 0.06);
+  --shadow-sm:      0 2px 4px rgba(2, 11, 20, 0.08), 0 1px 2px rgba(2, 11, 20, 0.06);
+  --shadow-md:      0 4px 12px rgba(2, 11, 20, 0.10), 0 2px 4px rgba(2, 11, 20, 0.06);
+  --shadow-lg:      0 8px 24px rgba(2, 11, 20, 0.12), 0 4px 8px rgba(2, 11, 20, 0.08);
+  --shadow-xl:      0 16px 48px rgba(2, 11, 20, 0.16), 0 8px 16px rgba(2, 11, 20, 0.10);
+  --shadow-2xl:     0 32px 80px rgba(2, 11, 20, 0.22), 0 16px 32px rgba(2, 11, 20, 0.12);
+  --shadow-inner:   inset 0 2px 6px rgba(2, 11, 20, 0.10);
+
+  /* Luxury Glow Effects */
+  --shadow-gold:      0 0 24px rgba(255, 180, 0, 0.20), 0 8px 32px rgba(2, 11, 20, 0.14);
+  --shadow-turquoise: 0 0 24px rgba(0, 175, 159, 0.18), 0 8px 32px rgba(2, 11, 20, 0.14);
+  --shadow-deep-sea:  0 0 32px rgba(26, 106, 178, 0.16), 0 8px 32px rgba(2, 11, 20, 0.18);
+
+  /* ══════════════════════════════════════
+     TRANSITIONS & MOTION
+     ══════════════════════════════════════ */
+
+  /* Durations */
+  --duration-instant:  50ms;
+  --duration-fast:     150ms;
+  --duration-normal:   250ms;
+  --duration-slow:     400ms;
+  --duration-slower:   600ms;
+  --duration-slowest:  900ms;
+  --duration-reveal:   1200ms;
+  --duration-cinematic: 2000ms;
+
+  /* Easing */
+  --ease-linear:      linear;
+  --ease-in:          cubic-bezier(0.4, 0, 1, 1);
+  --ease-out:         cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out:      cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-luxury:      cubic-bezier(0.22, 1, 0.36, 1);   /* Signature KLO easing */
+  --ease-bounce:      cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-spring:      cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+  /* Transition Presets */
+  --transition-fast:    all var(--duration-fast) var(--ease-luxury);
+  --transition-normal:  all var(--duration-normal) var(--ease-luxury);
+  --transition-slow:    all var(--duration-slow) var(--ease-luxury);
+  --transition-color:   color var(--duration-fast) var(--ease-out),
+                        background-color var(--duration-fast) var(--ease-out),
+                        border-color var(--duration-fast) var(--ease-out);
+  --transition-shadow:  box-shadow var(--duration-normal) var(--ease-luxury);
+  --transition-transform: transform var(--duration-normal) var(--ease-luxury);
+
+  /* ══════════════════════════════════════
+     Z-INDEX SCALE
+     ══════════════════════════════════════ */
+
+  --z-below:      -1;
+  --z-base:        0;
+  --z-raised:      10;
+  --z-dropdown:    100;
+  --z-sticky:      200;
+  --z-overlay:     300;
+  --z-modal:       400;
+  --z-toast:       500;
+  --z-tooltip:     600;
+  --z-top:         9999;
+
+  /* ══════════════════════════════════════
+     BREAKPOINTS (reference only — use in JS)
+     ══════════════════════════════════════ */
+  /* sm: 640px | md: 768px | lg: 1024px | xl: 1280px | 2xl: 1440px */
+
+}
+
+/* ══════════════════════════════════════
+   DARK MODE OVERRIDES
+   ══════════════════════════════════════ */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-primary:     var(--color-obsidian-950);
+    --bg-secondary:   var(--color-obsidian-900);
+    --bg-tertiary:    var(--color-obsidian-800);
+    --text-primary:   var(--color-pearl-100);
+    --text-secondary: var(--color-obsidian-300);
+    --border-subtle:  var(--color-obsidian-800);
+    --border-default: var(--color-obsidian-700);
+  }
+}
+
+[data-theme="dark"] {
+  --bg-primary:     var(--color-obsidian-950);
+  --bg-secondary:   var(--color-obsidian-900);
+  --bg-tertiary:    var(--color-obsidian-800);
+  --text-primary:   var(--color-pearl-100);
+  --text-secondary: var(--color-obsidian-300);
+  --border-subtle:  var(--color-obsidian-800);
+  --border-default: var(--color-obsidian-700);
+}
