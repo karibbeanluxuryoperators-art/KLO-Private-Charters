@@ -33,9 +33,9 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const SUGGESTED_PROMPTS = [
-    { label: "Private Jet to Caribbean", prompt: "I'd like to book a private jet from Miami to St. Barts for 4 people next week." },
-    { label: "London Group Mission", prompt: "We need a group flight from Sao Paulo to London for 12 passengers in June." },
-    { label: "Cartagena Weekend", prompt: "Enquiry for a flight from Bogota to Cartagena this Friday for 2 people." },
+    { label: "Miami → Cartagena", prompt: "I'd like to arrange a private flight from Miami to Cartagena for 4 people in December." },
+    { label: "New York → Bogotá", prompt: "We need a private jet from New York to Bogotá for 8 passengers in March." },
+    { label: "Bogotá → Medellín", prompt: "Looking for a domestic private flight from Bogotá to Medellín this weekend, 2 passengers." },
   ];
 
   useEffect(() => {
@@ -132,7 +132,7 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
         status: 'pending',
         createdAt: serverTimestamp(),
       });
-      toast.success("Solicitud procesada / Request processed");
+      toast.success("Enquiry received — we will be in touch.");
     } catch (e) {
       console.error("Error saving inquiry:", e);
     }
@@ -147,8 +147,8 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
         <div className="flex items-center gap-4">
           <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse shadow-[0_0_8px_rgba(197,160,89,0.5)]" />
           <div className="space-y-0.5">
-            <h2 className="text-[10px] sm:text-[11px] font-display tracking-[0.3em] text-white/90 uppercase font-medium">Mission Control</h2>
-            <p className="text-[8px] tracking-[0.1em] text-white/30 uppercase font-display">Private Terminal Access</p>
+            <h2 className="text-[10px] sm:text-[11px] font-display tracking-[0.3em] text-white/90 uppercase font-medium">Maria — KLO Advisor</h2>
+            <p className="text-[8px] tracking-[0.1em] text-white/30 uppercase font-display">Colombia Private Charters</p>
           </div>
         </div>
         <Badge variant="outline" className="text-[9px] border-primary/20 text-primary/80 px-2.5 py-0.5 rounded-none font-display tracking-widest bg-primary/5">
@@ -290,7 +290,7 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
                 animate={{ opacity: 1 }}
                 className="absolute left-0 top-1/2 -translate-y-1/2 text-[10px] sm:text-[11px] text-white/10 uppercase tracking-[0.4em] font-display pointer-events-none"
               >
-                Define Mission Requirements...
+                Where are you flying from?
               </motion.div>
             )}
             <Input
