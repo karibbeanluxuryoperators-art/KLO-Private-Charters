@@ -1,5 +1,4 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { GoogleGenAI } from "@google/genai";
 
 const MARIA_SYSTEM_PROMPT = `You are Maria, a senior charter advisor at KLO Private Charters — a luxury private aviation company specialising in private flights into Colombia.
 
@@ -69,32 +68,51 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   const { history } = req.body;
-
   if (!history || !Array.isArray(history)) {
     return res.status(400).json({ error: 'Invalid request body' });
   }
 
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = process.env.OPENROUTER_API_KEY;
   if (!apiKey) {
     return res.status(500).json({ error: 'API not configured' });
   }
 
-  try {
-    const ai = new GoogleGenAI({ apiKey });
+  // Convert Gemini-style history to OpenAI messages format
+  const messages = [
+    { role: 'system', content: MARIA_SYSTEM_PROMPT },
+    ...history.map((h: { role: string; parts: { text: string }[] }) => ({
+      role: h.role === 'model' ? 'assistant' : 'user',
+      content: h.parts.map((p: { text: string }) => p.text).join(''),
+    })),
+  ];
 
-    const response = await ai.models.generateContent({
-      model: "gemini-2.0-flash",
-      contents: history,
-      config: {
-        systemInstruction: MARIA_SYSTEM_PROMPT,
-        temperature: 0.6,
+  try {
+    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+        'HTTP-Referer': 'https://klo-private-charters.vercel.app',
+        'X-Title': 'KLO Private Charters',
       },
+      body: JSON.stringify({
+        model: 'deepseek/deepseek-chat-v3-0324:free',
+        messages,
+        temperature: 0.6,
+      }),
     });
 
-    return res.status(200).json({ text: response.text });
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}));
+      return res.status(response.status).json({ error: (err as any)?.error?.message || 'Upstream error' });
+    }
+
+    const data = await response.json() as { choices: { message: { content: string } }[] };
+    const text = data.choices?.[0]?.message?.content || '';
+    return res.status(200).json({ text });
+
   } catch (error: any) {
-    console.error('Gemini API error:', error);
-    const status = error?.status || 500;
-    return res.status(status).json({ error: error?.message || 'Service unavailable' });
+    console.error('OpenRouter error:', error);
+    return res.status(500).json({ error: error?.message || 'Service unavailable' });
   }
 }
