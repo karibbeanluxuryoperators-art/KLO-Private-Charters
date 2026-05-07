@@ -72,12 +72,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: 'Invalid request body' });
   }
 
-  const apiKey = process.env.OPENROUTER_API_KEY;
+  const apiKey = process.env.GROQ_API_KEY;
   if (!apiKey) {
     return res.status(500).json({ error: 'API not configured' });
   }
 
-  // Convert Gemini-style history to OpenAI messages format
   const messages = [
     { role: 'system', content: MARIA_SYSTEM_PROMPT },
     ...history.map((h: { role: string; parts: { text: string }[] }) => ({
@@ -87,18 +86,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   ];
 
   try {
-    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
-        'HTTP-Referer': 'https://klo-private-charters.vercel.app',
-        'X-Title': 'KLO Private Charters',
       },
       body: JSON.stringify({
-        model: 'openai/gpt-oss-20b:free',
+        model: 'llama-3.3-70b-versatile',
         messages,
         temperature: 0.6,
+        max_tokens: 512,
       }),
     });
 
@@ -112,7 +110,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(200).json({ text });
 
   } catch (error: any) {
-    console.error('OpenRouter error:', error);
+    console.error('Groq error:', error);
     return res.status(500).json({ error: error?.message || 'Service unavailable' });
   }
 }
