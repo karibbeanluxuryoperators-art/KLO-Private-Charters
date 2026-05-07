@@ -5,10 +5,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Send, Plane, Crown, MessageSquare } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
@@ -30,7 +27,8 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
   const [isComplete, setIsComplete] = useState(false);
   const [collectedInquiry, setCollectedInquiry] = useState<any>(null);
   
-  const scrollRef = useRef<HTMLDivElement>(null);
+  // Anchor div at bottom of message list — scrollIntoView is bulletproof
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const SUGGESTED_PROMPTS = [
     { label: "Miami → Cartagena", prompt: "I'd like to arrange a private flight from Miami to Cartagena for 4 people in December." },
@@ -39,7 +37,6 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
   ];
 
   useEffect(() => {
-    // Initial Greeting
     const startChat = async () => {
       setIsTyping(true);
       const greeting = "Welcome to KLO. / Bienvenido a KLO. / Bem-vindo à KLO.\n\nI am your Personal Concierge. To begin orchestrating your mission, please state your current location and desired destination.";
@@ -50,21 +47,9 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
     startChat();
   }, []);
 
+  // Scroll to bottom whenever messages change or typing indicator appears
   useEffect(() => {
-    if (scrollRef.current) {
-      const scroll = () => {
-        if (scrollRef.current) {
-          scrollRef.current.scrollTo({
-            top: scrollRef.current.scrollHeight,
-            behavior: 'smooth'
-          });
-        }
-      };
-      
-      scroll();
-      const timeoutId = setTimeout(scroll, 100);
-      return () => clearTimeout(timeoutId);
-    }
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isTyping]);
 
   const handleSend = async (customValue?: string) => {
@@ -143,6 +128,7 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(197,160,89,0.04),transparent_70%)] pointer-events-none" />
       <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary/20 to-transparent opacity-30" />
       
+      {/* Header */}
       <div className="p-4 sm:p-5 border-b border-white/[0.03] flex items-center justify-between z-10 bg-black/60 backdrop-blur-xl flex-none">
         <div className="flex items-center gap-4">
           <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse shadow-[0_0_8px_rgba(197,160,89,0.5)]" />
@@ -156,8 +142,9 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
         </Badge>
       </div>
 
-      <ScrollArea className="flex-1 min-h-0 px-4 sm:px-10 py-6 sm:py-8 z-10" viewportRef={scrollRef}>
-        <div className="space-y-6 sm:space-y-8 pb-32 max-w-2xl mx-auto">
+      {/* Messages — plain div with overflow-y scroll, flex-1 so it fills space */}
+      <div className="flex-1 min-h-0 overflow-y-auto px-4 sm:px-10 py-6 sm:py-8 z-10">
+        <div className="space-y-6 sm:space-y-8 pb-4 max-w-2xl mx-auto">
           <AnimatePresence initial={false}>
             {messages.map((message) => (
               <motion.div
@@ -176,7 +163,7 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
                     ? "bg-primary/[0.03] border border-primary/10 text-white/90 font-light" 
                     : "bg-white/[0.02] border border-white/5 text-white/80 font-light"
                 )}>
-                  <p className="text-xs sm:text-[13px] leading-relaxed tracking-wide font-light font-display">
+                  <p className="text-xs sm:text-[13px] leading-relaxed tracking-wide font-light font-display whitespace-pre-wrap">
                     {message.content}
                   </p>
                 </div>
@@ -227,15 +214,12 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
                transition={{ duration: 1, delay: 0.5 }}
                className="mt-16 relative group"
             >
-              {/* Luxury Flight Manifesto Design */}
               <div className="absolute -inset-4 bg-primary/5 blur-2xl opacity-50 transition-opacity duration-1000 group-hover:opacity-100" />
               <div className="relative border border-primary/20 bg-black/40 p-8 sm:p-12 text-center backdrop-blur-2xl">
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 px-4 bg-black border border-primary/20 text-primary text-[8px] uppercase tracking-[0.5em] py-1 font-display">
                   Confirmed Manifesto
                 </div>
-                
                 <h3 className="font-serif italic text-3xl sm:text-4xl text-primary mb-12 opacity-90">Bon Voyage</h3>
-                
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-y-10 gap-x-12 text-left max-w-xl mx-auto mb-16">
                   <div className="space-y-1.5">
                     <p className="text-[9px] uppercase tracking-[0.3em] text-white/20 font-display font-bold">Client Identity</p>
@@ -267,7 +251,6 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
                     <p className="text-sm text-white/90 font-light font-display tracking-wider italic">{collectedInquiry.departure_date}</p>
                   </div>
                 </div>
-
                 <div className="space-y-4">
                   <p className="text-white/30 text-[9px] font-display uppercase tracking-[0.4em] max-w-sm mx-auto leading-relaxed">
                     Logistic protocols initiated. A bespoke itinerary is being prepared for {collectedInquiry.email}.
@@ -278,9 +261,13 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
               </div>
             </motion.div>
           )}
-        </div>
-      </ScrollArea>
 
+          {/* Invisible anchor — always scrolled into view after new messages */}
+          <div ref={messagesEndRef} />
+        </div>
+      </div>
+
+      {/* Input */}
       <div className="p-6 sm:p-10 border-t border-white/[0.03] z-10 bg-black/60 shadow-[0_-20px_60px_rgba(0,0,0,0.5)] flex-none">
         <div className="max-w-xl mx-auto flex flex-col gap-4">
           <div className="relative group">
@@ -310,4 +297,3 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
     </Card>
   );
 }
-
