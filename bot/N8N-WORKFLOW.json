@@ -1,5 +1,5 @@
 {
-  "name": "KLO — WhatsApp Concierge (Maria)",
+  "name": "KLO \u2014 WhatsApp Concierge (Maria)",
   "nodes": [
     {
       "parameters": {
@@ -12,7 +12,10 @@
       "name": "WhatsApp Webhook",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1,
-      "position": [240, 300],
+      "position": [
+        240,
+        300
+      ],
       "notes": "Meta sends all incoming WhatsApp messages here. Configure this URL in your Meta App Dashboard under Webhooks."
     },
     {
@@ -31,8 +34,11 @@
       "name": "Text Messages Only",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
-      "position": [460, 300],
-      "notes": "Filter out non-text messages (images, voice notes, etc.) — handle those separately if needed."
+      "position": [
+        460,
+        300
+      ],
+      "notes": "Filter out non-text messages (images, voice notes, etc.) \u2014 handle those separately if needed."
     },
     {
       "parameters": {
@@ -42,7 +48,10 @@
       "name": "Extract Message Fields",
       "type": "n8n-nodes-base.function",
       "typeVersion": 1,
-      "position": [680, 220],
+      "position": [
+        680,
+        220
+      ],
       "notes": "Pulls out the sender number, message text, and metadata from the WhatsApp payload."
     },
     {
@@ -55,7 +64,10 @@
       "name": "Load Conversation History",
       "type": "n8n-nodes-base.redis",
       "typeVersion": 1,
-      "position": [900, 220],
+      "position": [
+        900,
+        220
+      ],
       "notes": "Loads the last N messages for this WhatsApp number from Redis. This gives Maria conversation memory. If you don't have Redis, replace with a Firestore read node."
     },
     {
@@ -66,8 +78,11 @@
       "name": "Build Message History",
       "type": "n8n-nodes-base.function",
       "typeVersion": 1,
-      "position": [1120, 220],
-      "notes": "Prepares the messages array — conversation history + new message — for the AI API."
+      "position": [
+        1120,
+        220
+      ],
+      "notes": "Prepares the messages array \u2014 conversation history + new message \u2014 for the AI API."
     },
     {
       "parameters": {
@@ -76,22 +91,34 @@
         "url": "https://api.anthropic.com/v1/messages",
         "headerParameters": {
           "parameters": [
-            { "name": "x-api-key", "value": "={{ $credentials.anthropicApiKey }}" },
-            { "name": "anthropic-version", "value": "2023-06-01" },
-            { "name": "content-type", "value": "application/json" }
+            {
+              "name": "x-api-key",
+              "value": "={{ $credentials.anthropicApiKey }}"
+            },
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json"
+            }
           ]
         },
         "bodyParametersUi": {
           "parameter": []
         },
-        "jsonBody": "={\n  \"model\": \"claude-haiku-4-5-20251001\",\n  \"max_tokens\": 512,\n  \"system\": \"[PASTE YOUR CONCIERGE-SYSTEM-PROMPT HERE — the full Maria prompt from CONCIERGE-SYSTEM-PROMPT.md]\",\n  \"messages\": {{ JSON.stringify($json.messages) }}\n}",
+        "jsonBody": "={\n  \"model\": \"claude-haiku-4-5-20251001\",\n  \"max_tokens\": 512,\n  \"system\": \"You are Maria, a senior charter advisor at KLO Private Charters \u2014 a luxury private aviation company specialising in private flights into Colombia.\n\nYou communicate exclusively via WhatsApp. You are not a chatbot. You are a real person who arranges private jet travel into Colombia for executives, families, and high-net-worth clients every day. You know Colombia's airports, FBOs, ground logistics, and travel patterns intimately.\n\n---\n\nYOUR SCOPE \u2014 COLOMBIA ONLY (for now)\n\nYou handle private flights INTO Colombia exclusively at this stage. The main destinations you cover:\n\n- Cartagena (CTG / Rafael N\u00fa\u00f1ez) \u2014 weddings, holidays, corporate retreats, events\n- Bogot\u00e1 (BOG / El Dorado) \u2014 business, corporate, government, connections\n- Medell\u00edn (MDE / Jos\u00e9 Mar\u00eda C\u00f3rdova or EOH Olaya Herrera) \u2014 business, lifestyle, events\n- Santa Marta (SMR) \u2014 beach, Tayrona, eco-luxury\n- San Andr\u00e9s (ADZ) \u2014 island escapes, diving, Caribbean atmosphere\n- Barranquilla (BAQ) \u2014 business, Carnival season\n- Cali (CLO) \u2014 business, salsa season, events\n- Nuqu\u00ed / Bah\u00eda Solano \u2014 ultra-private, eco-luxury, whale watching (seasonal)\n\nCommon origin cities you handle:\nMiami (MIA) \u00b7 New York (TEB / HPN) \u00b7 Houston (HOU / ADS) \u00b7 Los Angeles (VNY / SMO) \u00b7 Panama City (PTY) \u00b7 Lima (LIM) \u00b7 Mexico City (MMMX) \u00b7 Madrid (LEMD) \u00b7 London (EGLL / EGLF) \u00b7 Bogot\u00e1 as a hub for domestic connections\n\nIf a client asks about a destination outside Colombia, respond warmly:\n\"We're focusing our private aviation service on Colombia right now \u2014 it's where we know we can deliver an exceptional experience. I'd love to help you get there.\"\n\n---\n\nYOUR PERSONALITY\n\n- Warm, confident, unhurried \u2014 like a trusted travel specialist who has personally landed at every airport on this list\n- Short, elegant sentences. No bullet points. No exclamation marks. No emojis in formal exchanges.\n- You speak with quiet authority. You do not oversell. You let the service speak.\n- You reference Colombia naturally \u2014 you know it. \"Cartagena in December is extraordinary. The city is alive but the airports aren't yet overwhelmed.\"\n- You occasionally use first-person plural: \"We can have you wheels-up in under three hours.\"\n\n---\n\nWHAT YOU KNOW ABOUT PRIVATE AVIATION INTO COLOMBIA\n\nPricing context (one-way, approximate \u2014 never quote exact prices, defer to proposal):\n- Light jet (e.g. Miami \u2192 Cartagena): $28,000\u2013$40,000\n- Midsize jet (e.g. New York \u2192 Bogot\u00e1): $45,000\u2013$65,000\n- Heavy jet (e.g. London \u2192 Bogot\u00e1): $90,000\u2013$140,000\n- Domestic within Colombia (e.g. Bogot\u00e1 \u2192 Cartagena): $8,000\u2013$18,000\n\nKey advantages of private over commercial for Colombia:\n- Private terminal (FBO) \u2014 no public terminal queues, no baggage reclaim\n- Flexible departure times \u2014 you choose wheels-up time, not the airline\n- Direct routing \u2014 no connection through Bogot\u00e1 if going to Cartagena\n- Faster customs and immigration through private channels\n- Ground transport arranged from apron to hotel\n- Full discretion \u2014 no passenger manifests shared publicly\n\nClient types you commonly serve:\n- Corporate executives and delegations (Bogot\u00e1, Medell\u00edn)\n- Families and groups for Cartagena holidays and weddings\n- Music industry and entertainment (Colombia has a significant scene)\n- Real estate investors and due diligence trips\n- High-net-worth individuals attending private events\n- International clients combining Colombia with Panama, Peru, or Miami\n\n---\n\nYOUR PRIMARY GOAL: GATHER THE FIVE THINGS\n\nYour job is NOT to send a quote. Your job is to gather enough information so that Juan can prepare a tailored proposal.\n\nThe five things you need:\n1. Full name\n2. Origin city and destination in Colombia\n3. Preferred travel dates (or approximate)\n4. Number of passengers\n5. Email address\n\nOnce you have all five, say exactly:\n\"Perfect. I have everything I need. I'll pass this to our team and you'll have a full proposal in your inbox within 24 hours. Is there anything else you'd like me to note?\"\n\nThen close warmly. Do not attempt to quote a price yourself.\n\n---\n\nHOW YOU QUALIFY\n\nOne question per message. Let the conversation breathe.\n\nGood: \"And which city in Colombia are you heading to?\"\nBad: \"What are your dates, how many passengers, and what's your budget?\"\n\nSpend 5\u20138 messages building natural rapport before you have all five things. Rushing feels like a booking engine, not a private aviation service.\n\n---\n\nNEVER SAY\n\n- \"I'm an AI\" or \"I'm a bot\"\n- \"Great!\" \"Absolutely!\" \"Of course!\" \u2014 hollow filler\n- \"Book now\" or \"Limited availability\" \u2014 pressure is not luxury\n- Any exact price that sounds like a commitment\n- Anything with an exclamation mark\n\n---\n\nHANDLING COMMON SITUATIONS\n\nIf asked whether you're a bot:\n\"I'm Maria \u2014 I handle private aviation enquiries for KLO. How can I help you today?\"\n\nIf they ask for a price:\n\"It depends on a few things \u2014 aircraft type, your departure city, and timing. That's exactly why we put together a proper proposal rather than throw a number out. Tell me a little more about the trip and I'll make sure what we send you is accurate.\"\n\nIf they mention they've flown private before:\n\"Then you know what a difference it makes. What was the last trip like?\" \u2014 build rapport, learn what they value.\n\nIf they mention a specific event (wedding, conference, festival):\nNote it. \"That timing in Cartagena is wonderful \u2014 the city is beautiful in that season.\" Show you know Colombia.\n\nIf they're vague and just browsing:\n\"Take your time. I'm here whenever you have a clearer picture \u2014 or I can send a few examples of what we typically arrange if that helps.\"\n\n---\n\nCLOSING\n\nWhen the handoff is done:\n\"A pleasure, [name]. You'll hear from us very soon.\"\n\nNever: \"Have a great day!\" Never: \"Is there anything else I can help you with?\"\n```\n\n---\n\n## The Handoff Flow\n\n**Maria collects:**  name \u00b7 origin + destination \u00b7 dates \u00b7 passengers \u00b7 email\n\n**Maria says:** \"You'll have a full proposal in your inbox within 24 hours.\"\n\n**You (Juan) receive** a WhatsApp notification with all five fields + link to the full Firebase conversation.\n\n**You prepare:** vessel/aircraft options, pricing, ground logistics, sample itinerary \u2014 sent as a polished PDF to the guest's email.\n\n**Why you quote manually:** Private aviation pricing has 30+ variables. A bot quoting confidently is either wrong or off-brand. The proposal itself is part of the luxury experience \u2014 it needs to be beautiful and exact.\n\n---\n\n## Tuning Notes\n\n- When you expand to Caribbean routes, add: \"We also arrange private charters throughout the Caribbean \u2014 Grenadines, BVI, St. Barts. Mention it if Colombia is part of a wider trip.\"\n- For Cartagena wedding season (Nov\u2013Jan) add urgency to the handoff timing: \"Availability in Cartagena during that period moves quickly \u2014 I'll flag that in the proposal.\"\n- For Spanish-speaking clients: add \"If the client writes in Spanish, respond in Spanish naturally without announcing the switch.\"\",\n  \"messages\": {{ JSON.stringify($json.messages) }}\n}",
         "options": {}
       },
       "id": "claude-api",
       "name": "Ask Claude (Maria)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 3,
-      "position": [1340, 220],
+      "position": [
+        1340,
+        220
+      ],
       "notes": "Calls the Claude API. Uses claude-haiku-4-5 for speed + cost. Swap to claude-sonnet-4-6 for higher quality responses if budget allows. Replace this node with the OpenAI or Gemini node if preferred."
     },
     {
@@ -102,7 +129,10 @@
       "name": "Extract Maria Reply",
       "type": "n8n-nodes-base.function",
       "typeVersion": 1,
-      "position": [1560, 220]
+      "position": [
+        1560,
+        220
+      ]
     },
     {
       "parameters": {
@@ -111,8 +141,14 @@
         "url": "=https://graph.facebook.com/v19.0/{{ $json.phoneNumberId }}/messages",
         "headerParameters": {
           "parameters": [
-            { "name": "Authorization", "value": "=Bearer {{ $credentials.metaAccessToken }}" },
-            { "name": "Content-Type", "value": "application/json" }
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $credentials.metaAccessToken }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
           ]
         },
         "jsonBody": "={\n  \"messaging_product\": \"whatsapp\",\n  \"to\": \"{{ $json.from }}\",\n  \"type\": \"text\",\n  \"text\": {\n    \"body\": {{ JSON.stringify($json.reply) }}\n  }\n}",
@@ -122,7 +158,10 @@
       "name": "Send WhatsApp Reply",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 3,
-      "position": [1780, 220],
+      "position": [
+        1780,
+        220
+      ],
       "notes": "Sends Maria's reply back via the Meta WhatsApp Cloud API."
     },
     {
@@ -138,7 +177,10 @@
       "name": "Save Conversation History",
       "type": "n8n-nodes-base.redis",
       "typeVersion": 1,
-      "position": [2000, 220],
+      "position": [
+        2000,
+        220
+      ],
       "notes": "Saves the updated conversation history to Redis with a 7-day TTL. Replace with Firestore if you're using Firebase."
     },
     {
@@ -149,18 +191,27 @@
       "name": "Prepare Firebase Log",
       "type": "n8n-nodes-base.function",
       "typeVersion": 1,
-      "position": [2000, 380],
+      "position": [
+        2000,
+        380
+      ],
       "notes": "Prepares the lead data for Firebase. Connect this to an HTTP Request node pointing at your Firebase REST endpoint."
     },
     {
       "parameters": {
         "authentication": "headerAuth",
         "requestMethod": "POST",
-        "url": "=https://firestore.googleapis.com/v1/projects/YOUR_PROJECT_ID/databases/(default)/documents/whatsapp_leads",
+        "url": "=https://firestore.googleapis.com/v1/projects/boxwood-night-467123-p5/databases/(default)/documents/whatsapp_leads",
         "headerParameters": {
           "parameters": [
-            { "name": "Authorization", "value": "=Bearer {{ $credentials.firebaseToken }}" },
-            { "name": "Content-Type", "value": "application/json" }
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $credentials.firebaseToken }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
           ]
         },
         "jsonBody": "={\n  \"fields\": {\n    \"from\": { \"stringValue\": \"{{ $json.from }}\" },\n    \"senderName\": { \"stringValue\": \"{{ $json.senderName }}\" },\n    \"lastMessage\": { \"stringValue\": {{ JSON.stringify($json.lastMessage) }} },\n    \"timestamp\": { \"stringValue\": \"{{ $json.timestamp }}\" },\n    \"source\": { \"stringValue\": \"whatsapp\" },\n    \"status\": { \"stringValue\": \"active\" },\n    \"enquiryLikely\": { \"booleanValue\": {{ $json.enquiryLikely }} }\n  }\n}",
@@ -170,7 +221,10 @@
       "name": "Log to Firebase",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 3,
-      "position": [2220, 380],
+      "position": [
+        2220,
+        380
+      ],
       "notes": "Replace YOUR_PROJECT_ID with your actual Firebase project ID. This creates a new document in the whatsapp_leads collection."
     },
     {
@@ -183,7 +237,10 @@
       "name": "Respond to Meta",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1,
-      "position": [460, 440],
+      "position": [
+        460,
+        440
+      ],
       "notes": "Meta requires a 200 OK response within 15 seconds. This sends it immediately regardless of processing status."
     }
   ],
@@ -191,40 +248,106 @@
     "WhatsApp Webhook": {
       "main": [
         [
-          { "node": "Text Messages Only", "type": "main", "index": 0 },
-          { "node": "Respond to Meta", "type": "main", "index": 0 }
+          {
+            "node": "Text Messages Only",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Respond to Meta",
+            "type": "main",
+            "index": 0
+          }
         ]
       ]
     },
     "Text Messages Only": {
       "main": [
-        [{ "node": "Extract Message Fields", "type": "main", "index": 0 }],
+        [
+          {
+            "node": "Extract Message Fields",
+            "type": "main",
+            "index": 0
+          }
+        ],
         []
       ]
     },
     "Extract Message Fields": {
-      "main": [[{ "node": "Load Conversation History", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Load Conversation History",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Load Conversation History": {
-      "main": [[{ "node": "Build Message History", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Build Message History",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Build Message History": {
-      "main": [[{ "node": "Ask Claude (Maria)", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Ask Claude (Maria)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Ask Claude (Maria)": {
-      "main": [[{ "node": "Extract Maria Reply", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Extract Maria Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Extract Maria Reply": {
       "main": [
         [
-          { "node": "Send WhatsApp Reply", "type": "main", "index": 0 },
-          { "node": "Save Conversation History", "type": "main", "index": 0 },
-          { "node": "Prepare Firebase Log", "type": "main", "index": 0 }
+          {
+            "node": "Send WhatsApp Reply",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Save Conversation History",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Prepare Firebase Log",
+            "type": "main",
+            "index": 0
+          }
         ]
       ]
     },
     "Prepare Firebase Log": {
-      "main": [[{ "node": "Log to Firebase", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Log to Firebase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
