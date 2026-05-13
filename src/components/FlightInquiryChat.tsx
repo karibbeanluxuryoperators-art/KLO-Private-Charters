@@ -27,10 +27,7 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
   const [isComplete, setIsComplete] = useState(false);
   const [collectedInquiry, setCollectedInquiry] = useState<any>(null);
 
-  // Scroll anchor
   const messagesEndRef = useRef<HTMLDivElement>(null);
-
-  // Autofocus input
   const inputRef = useRef<HTMLInputElement>(null);
 
   const SUGGESTED_PROMPTS = [
@@ -49,39 +46,30 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
   ];
 
   useEffect(() => {
-    const startChat = async () => {
-      setIsTyping(true);
+    const greeting =
+      "Welcome to KLO. / Bienvenido a KLO. / Bem-vindo à KLO.\n\nI am your Personal Concierge. To begin orchestrating your journey, please share your departure and destination.";
 
-      const greeting =
-        "Welcome to KLO. / Bienvenido a KLO. / Bem-vindo à KLO.\n\nI am your Personal Concierge. To begin orchestrating your journey, please share your departure and destination.";
+    setMessages([
+      {
+        id: 'init',
+        role: 'assistant',
+        content: greeting,
+        timestamp: new Date()
+      }
+    ]);
 
-      setMessages([
-        {
-          id: 'init',
-          role: 'assistant',
-          content: greeting,
-          timestamp: new Date()
-        }
-      ]);
+    setHistory([
+      {
+        role: 'model',
+        parts: [{ text: greeting }]
+      }
+    ]);
 
-      setHistory([
-        {
-          role: 'model',
-          parts: [{ text: greeting }]
-        }
-      ]);
-
-      setIsTyping(false);
-
-      setTimeout(() => {
-        inputRef.current?.focus();
-      }, 200);
-    };
-
-    startChat();
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 300);
   }, []);
 
-  // Auto scroll
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({
       behavior: 'smooth'
@@ -128,14 +116,14 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
         try {
           extractedData = JSON.parse(jsonMatch[0]);
 
-          // Remove JSON from visible response
+          // Remove JSON from visible UI
           content = responseText
             .replace(jsonMatch[0], '')
             .replace(/```json/g, '')
             .replace(/```/g, '')
             .trim();
 
-          // Fallback closing message
+          // Fallback confirmation
           if (!content || content.length < 5) {
             content =
               "Perfect. I have everything I need. Our concierge team will contact you shortly with your tailored charter proposal.";
@@ -151,7 +139,11 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
 
             await saveInquiry(extractedData);
 
-            setIsComplete(true);
+            // IMPORTANT:
+            // Delay completion so message renders first
+            setTimeout(() => {
+              setIsComplete(true);
+            }, 1200);
           }
 
         } catch (e) {
@@ -165,10 +157,12 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: content,
+        content,
         timestamp: new Date()
       };
 
+      // IMPORTANT:
+      // Render assistant message BEFORE completion state
       setMessages(prev => [...prev, assistantMessage]);
 
       setHistory([
@@ -189,7 +183,6 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
     } finally {
       setIsTyping(false);
 
-      // Keep input focused
       setTimeout(() => {
         inputRef.current?.focus();
       }, 100);
@@ -229,8 +222,9 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
 
       <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary/20 to-transparent opacity-30" />
 
-      {/* Header */}
+      {/* HEADER */}
       <div className="p-4 sm:p-5 border-b border-white/[0.03] flex items-center justify-between z-10 bg-black/60 backdrop-blur-xl flex-none">
+
         <div className="flex items-center gap-4">
           <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse shadow-[0_0_8px_rgba(197,160,89,0.5)]" />
 
@@ -253,8 +247,9 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
         </Badge>
       </div>
 
-      {/* Messages */}
+      {/* MESSAGES */}
       <div className="flex-1 min-h-0 overflow-y-auto px-4 sm:px-10 py-6 sm:py-8 z-10">
+
         <div className="space-y-6 sm:space-y-8 pb-4 max-w-2xl mx-auto">
 
           <AnimatePresence initial={false}>
@@ -348,6 +343,7 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
             </motion.div>
           )}
 
+          {/* FINAL CONFIRMATION CARD */}
           {isComplete && collectedInquiry && (
             <motion.div
               initial={{
@@ -376,76 +372,6 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
                   Bon Voyage
                 </h3>
 
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-y-10 gap-x-12 text-left max-w-xl mx-auto mb-16">
-
-                  <div className="space-y-1.5">
-                    <p className="text-[9px] uppercase tracking-[0.3em] text-white/20 font-display font-bold">
-                      Client
-                    </p>
-
-                    <p className="text-sm text-white/90 font-light font-display tracking-wider truncate">
-                      {collectedInquiry.client_name}
-                    </p>
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <p className="text-[9px] uppercase tracking-[0.3em] text-white/20 font-display font-bold">
-                      Capacity
-                    </p>
-
-                    <p className="text-sm text-white/90 font-light font-display tracking-wider">
-                      {collectedInquiry.passengers} PAX
-                    </p>
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <p className="text-[9px] uppercase tracking-[0.3em] text-white/20 font-display font-bold">
-                      Status
-                    </p>
-
-                    <p className="text-sm text-primary/80 font-light font-display tracking-wider">
-                      Confirmed
-                    </p>
-                  </div>
-
-                  <div className="space-y-2 col-span-2 md:col-span-1 pt-4 md:pt-0">
-                    <div className="flex items-center gap-4">
-
-                      <div className="space-y-1">
-                        <p className="text-[9px] uppercase tracking-[0.3em] text-white/20 font-display font-bold">
-                          Origin
-                        </p>
-
-                        <p className="text-xs text-primary/80 font-medium font-display tracking-widest">
-                          {collectedInquiry.origin_airport}
-                        </p>
-                      </div>
-
-                      <div className="w-8 h-[1px] bg-primary/20 mt-4" />
-
-                      <div className="space-y-1">
-                        <p className="text-[9px] uppercase tracking-[0.3em] text-white/20 font-display font-bold">
-                          Destination
-                        </p>
-
-                        <p className="text-xs text-primary/80 font-medium font-display tracking-widest">
-                          {collectedInquiry.destination_airport}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="space-y-1.5 col-span-2">
-                    <p className="text-[9px] uppercase tracking-[0.3em] text-white/20 font-display font-bold">
-                      Departure
-                    </p>
-
-                    <p className="text-sm text-white/90 font-light font-display tracking-wider italic">
-                      {collectedInquiry.departure_date}
-                    </p>
-                  </div>
-                </div>
-
                 <div className="space-y-4">
                   <p className="text-white/30 text-[9px] font-display uppercase tracking-[0.4em] max-w-sm mx-auto leading-relaxed">
                     Your concierge request has been received. A tailored proposal is now being prepared for {collectedInquiry.email}.
@@ -465,8 +391,9 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
         </div>
       </div>
 
-      {/* Input */}
+      {/* INPUT */}
       <div className="p-6 sm:p-10 border-t border-white/[0.03] z-10 bg-black/60 shadow-[0_-20px_60px_rgba(0,0,0,0.5)] flex-none">
+
         <div className="max-w-xl mx-auto flex flex-col gap-4">
 
           <div className="relative group">
