@@ -30,7 +30,7 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
   // Scroll anchor
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Input autofocus ref
+  // Autofocus input
   const inputRef = useRef<HTMLInputElement>(null);
 
   const SUGGESTED_PROMPTS = [
@@ -128,12 +128,18 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
         try {
           extractedData = JSON.parse(jsonMatch[0]);
 
-          // Remove JSON from UI
+          // Remove JSON from visible response
           content = responseText
             .replace(jsonMatch[0], '')
             .replace(/```json/g, '')
             .replace(/```/g, '')
             .trim();
+
+          // Fallback closing message
+          if (!content || content.length < 5) {
+            content =
+              "Perfect. I have everything I need. Our concierge team will contact you shortly with your tailored charter proposal.";
+          }
 
           const hasRequired =
             extractedData.origin_airport &&
@@ -150,7 +156,9 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
 
         } catch (e) {
           console.error("JSON parse/save error:", e);
-          content = responseText || '';
+
+          content =
+            "Perfect. I have everything I need. Our concierge team will contact you shortly with your tailored charter proposal.";
         }
       }
 
@@ -181,7 +189,7 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
     } finally {
       setIsTyping(false);
 
-      // Refocus input automatically
+      // Keep input focused
       setTimeout(() => {
         inputRef.current?.focus();
       }, 100);
@@ -453,7 +461,6 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
             </motion.div>
           )}
 
-          {/* Scroll anchor */}
           <div ref={messagesEndRef} />
         </div>
       </div>
