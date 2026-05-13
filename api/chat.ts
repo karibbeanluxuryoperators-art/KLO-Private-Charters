@@ -359,22 +359,42 @@ ${lead.special_requests || 'None'}
       }
     }
 
-    // SEND FULL RESPONSE TO WEBSITE
+  // SEPARAR JSON DEL TEXTO VISIBLE
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    const cleanText = jsonMatch
+      ? text.replace(jsonMatch[0], '').trim()
+      : text;
+
+    let leadData: Record<string, any> | null = null;
+    if (jsonMatch) {
+      try {
+        leadData = JSON.parse(jsonMatch[0]);
+      } catch (err) {
+        console.error('JSON parse error:', err);
+      }
+    }
+
+    // TELEGRAM LEAD NOTIFICATION
+    if (leadData) {
+      const telegramMessage = `✈️ NEW KLO LEAD
+
+👤 Client: ${leadData.client_name || 'Valued Client'}
+📧 Email: ${leadData.email || '-'}
+📱 Phone: ${leadData.phone || '-'}
+🛫 Origin: ${leadData.origin_airport || '-'}
+🛬 Destination: ${leadData.destination_airport || '-'}
+📅 Departure: ${leadData.departure_date || '-'}
+🔁 Return: ${leadData.return_date || 'One Way'}
+👥 Passengers: ${leadData.passengers || '-'}
+
+📝 Special Requests:
+${leadData.special_requests || 'None'}
+`;
+      await sendTelegramMessage(telegramMessage).catch(console.error);
+    }
+
+    // ENVIAR SOLO TEXTO LIMPIO AL FRONTEND
     return res.status(200).json({
-      text,
+      text: cleanText,
+      lead: leadData,
     });
-
-  } catch (error: any) {
-
-    console.error(
-      'Groq API Error:',
-      error
-    );
-
-    return res.status(500).json({
-      error:
-        error?.message ||
-        'Service unavailable',
-    });
-  }
-}
