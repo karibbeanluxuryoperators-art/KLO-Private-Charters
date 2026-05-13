@@ -129,10 +129,13 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
               "Perfect. I have everything I need. Our concierge team will contact you shortly with your tailored charter proposal.";
           }
 
-          const hasRequired =
+         const hasRequired =
+            extractedData.email &&
+            extractedData.phone &&
             extractedData.origin_airport &&
             extractedData.destination_airport &&
-            extractedData.client_name;
+            extractedData.departure_date &&
+            extractedData.passengers;
 
           if (hasRequired) {
             setCollectedInquiry(extractedData);
