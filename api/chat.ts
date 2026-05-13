@@ -139,6 +139,7 @@ export default async function handler(
   req: VercelRequest,
   res: VercelResponse
 ) {
+
   if (req.method !== 'POST') {
     return res.status(405).json({
       error: 'Method not allowed',
@@ -172,7 +173,10 @@ export default async function handler(
         role: string;
         parts: { text: string }[];
       }) => ({
-        role: h.role === 'model' ? 'assistant' : 'user',
+        role: h.role === 'model'
+          ? 'assistant'
+          : 'user',
+
         content: h.parts
           .map((p: { text: string }) => p.text)
           .join(''),
@@ -181,6 +185,7 @@ export default async function handler(
   ];
 
   try {
+
     const response = await fetch(
       'https://api.groq.com/openai/v1/chat/completions',
       {
@@ -201,7 +206,10 @@ export default async function handler(
     );
 
     if (!response.ok) {
-      const err = await response.json().catch(() => ({}));
+
+      const err = await response
+        .json()
+        .catch(() => ({}));
 
       return res.status(response.status).json({
         error:
@@ -221,23 +229,62 @@ export default async function handler(
     const text =
       data.choices?.[0]?.message?.content || '';
 
-    // Detect completed lead JSON
+    // TELEGRAM LEAD NOTIFICATION
     if (text.includes('"client_name"')) {
-      await sendTelegramMessage(`NEW KLO LEAD
 
-${text}`);
+      try {
+
+        const jsonMatch =
+          text.match(/\{[\s\S]*\}/);
+
+        if (jsonMatch) {
+
+          const lead = JSON.parse(jsonMatch[0]);
+
+          const telegramMessage = `✈️ NEW KLO LEAD
+
+👤 Client: ${lead.client_name || '-'}
+📧 Email: ${lead.email || '-'}
+📱 Phone: ${lead.phone || '-'}
+🛫 Origin: ${lead.origin_airport || '-'}
+🛬 Destination: ${lead.destination_airport || '-'}
+📅 Departure: ${lead.departure_date || '-'}
+👥 Passengers: ${lead.passengers || '-'}
+
+📝 Special Requests:
+${lead.special_requests || 'None'}
+`;
+
+          await sendTelegramMessage(
+            telegramMessage
+          );
+        }
+
+      } catch (err) {
+
+        console.error(
+          'Telegram JSON parse error:',
+          err
+        );
+      }
     }
 
+    // SEND FULL RESPONSE TO WEBSITE
     return res.status(200).json({
       text,
     });
 
   } catch (error: any) {
-    console.error('Groq API Error:', error);
+
+    console.error(
+      'Groq API Error:',
+      error
+    );
 
     return res.status(500).json({
       error:
-        error?.message || 'Service unavailable',
+        error?.message ||
+        'Service unavailable',
     });
   }
 }
