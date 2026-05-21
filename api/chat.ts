@@ -315,55 +315,11 @@ export default async function handler(
       }[];
     };
 
-    const text =
-      data.choices?.[0]?.message?.content || '';
+    const text = data.choices?.[0]?.message?.content || '';
 
-    // TELEGRAM LEAD NOTIFICATION
-    if (text.includes('"email"')) {
-
-      try {
-
-        const jsonMatch =
-          text.match(/\{[\s\S]*\}/);
-
-        if (jsonMatch) {
-
-          const lead = JSON.parse(jsonMatch[0]);
-
-          const telegramMessage = `✈️ NEW KLO LEAD
-
-👤 Client: ${lead.client_name || 'Valued Client'}
-📧 Email: ${lead.email || '-'}
-📱 Phone: ${lead.phone || '-'}
-🛫 Origin: ${lead.origin_airport || '-'}
-🛬 Destination: ${lead.destination_airport || '-'}
-📅 Departure: ${lead.departure_date || '-'}
-🔁 Return: ${lead.return_date || 'One Way'}
-👥 Passengers: ${lead.passengers || '-'}
-
-📝 Special Requests:
-${lead.special_requests || 'None'}
-`;
-
-          await sendTelegramMessage(
-            telegramMessage
-          );
-        }
-
-      } catch (err) {
-
-        console.error(
-          'Telegram JSON parse error:',
-          err
-        );
-      }
-    }
-
-  // SEPARAR JSON DEL TEXTO VISIBLE
+    // SEPARAR JSON DEL TEXTO VISIBLE
     const jsonMatch = text.match(/\{[\s\S]*\}/);
-    const cleanText = jsonMatch
-      ? text.replace(jsonMatch[0], '').trim()
-      : text;
+    const cleanText = jsonMatch ? text.replace(jsonMatch[0], '').trim() : text;
 
     let leadData: Record<string, any> | null = null;
     if (jsonMatch) {
@@ -376,7 +332,8 @@ ${lead.special_requests || 'None'}
 
     // TELEGRAM LEAD NOTIFICATION
     if (leadData) {
-      const telegramMessage = `✈️ NEW KLO LEAD
+      try {
+        const telegramMessage = `✈️ NEW KLO LEAD
 
 👤 Client: ${leadData.client_name || 'Valued Client'}
 📧 Email: ${leadData.email || '-'}
@@ -390,7 +347,10 @@ ${lead.special_requests || 'None'}
 📝 Special Requests:
 ${leadData.special_requests || 'None'}
 `;
-      await sendTelegramMessage(telegramMessage).catch(console.error);
+        await sendTelegramMessage(telegramMessage);
+      } catch (err) {
+        console.error('Telegram notification error:', err);
+      }
     }
 
     // ENVIAR SOLO TEXTO LIMPIO AL FRONTEND
