@@ -217,26 +217,27 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
   return (
     <Card
       className={cn(
-        "w-full h-full flex flex-col min-h-0 glass border-white/[0.03] shadow-[0_48px_140px_rgba(0,0,0,1)] bg-black/50 relative overflow-hidden",
+        "w-full h-full flex flex-col min-h-0 glass border-white/[0.05] shadow-[0_64px_160px_rgba(0,0,0,1)] bg-black/40 relative overflow-hidden rounded-none",
         className
       )}
     >
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(197,160,89,0.04),transparent_70%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(184,150,62,0.03),transparent_70%)] pointer-events-none" />
 
-      <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary/20 to-transparent opacity-30" />
+      {/* Top gold hairline */}
+      <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#B8963E]/30 to-transparent z-20" />
 
       {/* HEADER */}
-      <div className="p-4 sm:p-5 border-b border-white/[0.03] flex items-center justify-between z-10 bg-black/60 backdrop-blur-xl flex-none">
+      <div className="p-5 sm:p-6 border-b border-white/[0.05] flex items-center justify-between z-10 bg-black/40 backdrop-blur-2xl flex-none">
 
         <div className="flex items-center gap-4">
-          <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse shadow-[0_0_8px_rgba(197,160,89,0.5)]" />
+          <div className="w-1 h-1 rounded-full bg-[#B8963E] animate-pulse shadow-[0_0_8px_rgba(184,150,62,0.6)]" />
 
           <div className="space-y-0.5">
-            <h2 className="text-[10px] sm:text-[11px] font-display tracking-[0.3em] text-white/90 uppercase font-medium">
+            <h2 className="klo-label text-white/90" style={{ fontSize: '11px', letterSpacing: '0.35em' }}>
               Maria — KLO Advisor
             </h2>
 
-            <p className="text-[8px] tracking-[0.1em] text-white/30 uppercase font-display">
+            <p className="klo-label text-white/25" style={{ fontSize: '8px', letterSpacing: '0.20em' }}>
               Private Aviation Concierge
             </p>
           </div>
@@ -244,16 +245,16 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
 
         <Badge
           variant="outline"
-          className="text-[9px] border-primary/20 text-primary/80 px-2.5 py-0.5 rounded-none font-display tracking-widest bg-primary/5"
+          className="text-[9px] border-[#B8963E]/20 text-[#B8963E]/70 px-3 py-1 rounded-none klo-label tracking-[0.25em] bg-[#B8963E]/5"
         >
           {isComplete ? "CONCLUDED" : "ESTABLISHING"}
         </Badge>
       </div>
 
       {/* MESSAGES */}
-      <div className="flex-1 min-h-0 overflow-y-auto px-4 sm:px-10 py-6 sm:py-8 z-10">
+      <div className="flex-1 min-h-0 overflow-y-auto px-5 sm:px-12 py-8 sm:py-12 z-10">
 
-        <div className="space-y-6 sm:space-y-8 pb-4 max-w-2xl mx-auto">
+        <div className="space-y-8 sm:space-y-12 pb-6 max-w-2xl mx-auto">
 
           <AnimatePresence initial={false}>
             {messages.map((message) => (
@@ -261,8 +262,8 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
                 key={message.id}
                 initial={{
                   opacity: 0,
-                  y: 12,
-                  filter: 'blur(8px)'
+                  y: 16,
+                  filter: 'blur(10px)'
                 }}
                 animate={{
                   opacity: 1,
@@ -270,30 +271,30 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
                   filter: 'blur(0px)'
                 }}
                 transition={{
-                  duration: 0.8,
-                  ease: [0.22, 1, 0.36, 1]
+                  duration: 1.0,
+                  ease: [0.16, 1, 0.3, 1]
                 }}
                 className={cn(
-                  "flex flex-col gap-2",
+                  "flex flex-col gap-3",
                   message.role === 'user'
-                    ? "items-end"
-                    : "items-start"
+                    ? "items-end text-right"
+                    : "items-start text-left"
                 )}
               >
                 <div
                   className={cn(
-                    "max-w-[90%] sm:max-w-[80%] rounded-none p-4 sm:p-5",
+                    "max-w-[92%] sm:max-w-[85%] rounded-none p-5 sm:p-6",
                     message.role === 'user'
-                      ? "bg-primary/[0.03] border border-primary/10 text-white/90 font-light"
-                      : "bg-white/[0.02] border border-white/5 text-white/80 font-light"
+                      ? "bg-[#B8963E]/[0.02] border border-[#B8963E]/10 text-white/90"
+                      : "bg-white/[0.015] border border-white/5 text-white/80"
                   )}
                 >
-                  <p className="text-xs sm:text-[13px] leading-relaxed tracking-wide font-light font-display whitespace-pre-wrap">
+                  <p className="klo-display text-base sm:text-lg leading-relaxed tracking-wide italic font-light whitespace-pre-wrap">
                     {message.content}
                   </p>
                 </div>
 
-                <span className="text-[8px] sm:text-[9px] uppercase tracking-[0.2em] font-display text-white/20 px-1">
+                <span className="klo-label text-[8px] sm:text-[9px] text-white/15 px-1" style={{ letterSpacing: '0.25em' }}>
                   {message.role === 'user'
                     ? "Client"
                     : "Concierge"} •{" "}
@@ -310,12 +311,13 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="text-primary/40 text-[9px] uppercase tracking-[0.4em] font-display flex items-center gap-2"
+              className="klo-label text-[#B8963E]/40 text-[9px] flex items-center gap-3"
+              style={{ letterSpacing: '0.45em' }}
             >
-              <div className="flex gap-1">
-                <span className="w-0.5 h-0.5 bg-primary/40 rounded-full animate-bounce [animation-delay:-0.3s]" />
-                <span className="w-0.5 h-0.5 bg-primary/40 rounded-full animate-bounce [animation-delay:-0.15s]" />
-                <span className="w-0.5 h-0.5 bg-primary/40 rounded-full animate-bounce" />
+              <div className="flex gap-1.5">
+                <span className="w-0.5 h-0.5 bg-[#B8963E]/40 rounded-full animate-bounce [animation-delay:-0.3s]" />
+                <span className="w-0.5 h-0.5 bg-[#B8963E]/40 rounded-full animate-bounce [animation-delay:-0.15s]" />
+                <span className="w-0.5 h-0.5 bg-[#B8963E]/40 rounded-full animate-bounce" />
               </div>
 
               Transmission
@@ -326,19 +328,21 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
             <motion.div
               initial={{
                 opacity: 0,
-                y: 10
+                y: 12
               }}
               animate={{
                 opacity: 1,
                 y: 0
               }}
-              className="flex flex-wrap gap-3 pt-6"
+              transition={{ delay: 0.8, duration: 1 }}
+              className="flex flex-wrap gap-4 pt-8"
             >
               {SUGGESTED_PROMPTS.map((item, idx) => (
                 <button
                   key={idx}
                   onClick={() => handleSend(item.prompt)}
-                  className="text-[9px] uppercase tracking-[0.3em] px-5 py-2.5 border border-white/5 bg-white/[0.02] hover:bg-primary/[0.08] hover:border-primary/30 transition-all duration-500 text-white/40 hover:text-white rounded-none font-display font-medium"
+                  className="klo-label text-[9px] px-6 py-3 border border-white/5 bg-white/[0.01] hover:bg-[#B8963E]/[0.05] hover:border-[#B8963E]/20 transition-all duration-700 text-white/30 hover:text-white rounded-none"
+                  style={{ letterSpacing: '0.35em' }}
                 >
                   {item.label}
                 </button>
@@ -351,38 +355,38 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
             <motion.div
               initial={{
                 opacity: 0,
-                y: 20
+                y: 30
               }}
               animate={{
                 opacity: 1,
                 y: 0
               }}
               transition={{
-                duration: 1,
-                delay: 0.5
+                duration: 1.2,
+                ease: [0.16, 1, 0.3, 1]
               }}
-              className="mt-16 relative group"
+              className="mt-20 relative group"
             >
-              <div className="absolute -inset-4 bg-primary/5 blur-2xl opacity-50 transition-opacity duration-1000 group-hover:opacity-100" />
+              <div className="absolute -inset-8 bg-[#B8963E]/5 blur-3xl opacity-40 transition-opacity duration-1000 group-hover:opacity-60" />
 
-              <div className="relative border border-primary/20 bg-black/40 p-8 sm:p-12 text-center backdrop-blur-2xl">
+              <div className="relative border border-[#B8963E]/15 bg-black/60 p-10 sm:p-16 text-center backdrop-blur-3xl rounded-none">
 
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 px-4 bg-black border border-primary/20 text-primary text-[8px] uppercase tracking-[0.5em] py-1 font-display">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 px-5 bg-black border border-[#B8963E]/20 text-[#B8963E] klo-label text-[8px] py-1.5" style={{ letterSpacing: '0.6em' }}>
                   Confirmed Manifest
                 </div>
 
-                <h3 className="font-serif italic text-3xl sm:text-4xl text-primary mb-12 opacity-90">
+                <h3 className="klo-display italic text-4xl sm:text-5xl text-[#B8963E] mb-14 opacity-90">
                   Bon Voyage
                 </h3>
 
-                <div className="space-y-4">
-                  <p className="text-white/30 text-[9px] font-display uppercase tracking-[0.4em] max-w-sm mx-auto leading-relaxed">
+                <div className="space-y-6">
+                  <p className="klo-label text-white/30 text-[9px] max-w-sm mx-auto leading-relaxed" style={{ letterSpacing: '0.45em' }}>
                     Your concierge request has been received. A tailored proposal is now being prepared for {collectedInquiry.email}.
                   </p>
 
-                  <div className="w-12 h-[1px] bg-primary/20 mx-auto" />
+                  <div className="w-16 h-[1px] bg-[#B8963E]/15 mx-auto" />
 
-                  <p className="text-[8px] uppercase tracking-[0.6em] text-primary/40 font-display">
+                  <p className="klo-label text-[8px] text-[#B8963E]/30" style={{ letterSpacing: '0.7em' }}>
                     Priority Concierge Active
                   </p>
                 </div>
@@ -395,9 +399,9 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
       </div>
 
       {/* INPUT */}
-      <div className="p-6 sm:p-10 border-t border-white/[0.03] z-10 bg-black/60 shadow-[0_-20px_60px_rgba(0,0,0,0.5)] flex-none">
+      <div className="p-8 sm:p-12 border-t border-white/[0.05] z-10 bg-black/60 backdrop-blur-xl shadow-[0_-32px_80px_rgba(0,0,0,0.4)] flex-none">
 
-        <div className="max-w-xl mx-auto flex flex-col gap-4">
+        <div className="max-w-xl mx-auto flex flex-col gap-6">
 
           <div className="relative group">
 
@@ -405,7 +409,8 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="absolute left-0 top-1/2 -translate-y-1/2 text-[10px] sm:text-[11px] text-white/10 uppercase tracking-[0.4em] font-display pointer-events-none"
+                className="absolute left-0 top-1/2 -translate-y-1/2 klo-label text-[10px] sm:text-[11px] text-white/10 pointer-events-none"
+                style={{ letterSpacing: '0.45em' }}
               >
                 Where would you like to fly?
               </motion.div>
@@ -418,13 +423,17 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
               onKeyDown={(e) =>
                 e.key === 'Enter' && handleSend()
               }
-              className="w-full h-12 bg-transparent border-white/5 text-white placeholder:text-transparent focus-visible:ring-0 rounded-none px-0 border-x-0 border-t-0 border-b-2 transition-all duration-700 focus:border-primary/40 text-[16px] sm:text-[15px] tracking-widest font-light font-display outline-none"
+              className="w-full h-14 bg-transparent border-white/5 text-white placeholder:text-transparent focus-visible:ring-0 rounded-none px-0 border-x-0 border-t-0 border-b border-white/[0.08] transition-all duration-1000 focus:border-[#B8963E]/50 text-[18px] sm:text-[20px] klo-display italic font-light outline-none"
+              style={{ letterSpacing: '0.05em' }}
               disabled={isComplete || isTyping}
             />
           </div>
 
-          <div className="flex justify-between items-center text-[8px] uppercase tracking-[0.4em] text-white/20 font-display font-medium">
-            <span>Encrypted Connection</span>
+          <div className="flex justify-between items-center klo-label text-[8px] text-white/15" style={{ letterSpacing: '0.5em' }}>
+            <span className="flex items-center gap-2">
+              <span className="w-1 h-1 rounded-full bg-white/10" />
+              Encrypted Connection
+            </span>
             <span>MMXXVI</span>
           </div>
         </div>

@@ -398,3 +398,10 @@ ${leadData.special_requests || 'None'}
       text: cleanText,
       lead: leadData,
     });
+  } catch (error) {
+    console.error('API Error:', error);
+    return res.status(500).json({
+      error: 'Internal server error',
+    });
+  }
+}
