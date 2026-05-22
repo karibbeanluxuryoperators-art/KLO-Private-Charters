@@ -47,7 +47,7 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
 
   useEffect(() => {
     const greeting =
-      "Welcome to KLO. / Bienvenido a KLO. / Bem-vindo à KLO.\n\nI am your Personal Concierge. To begin orchestrating your journey, please share your departure and destination.";
+      "Welcome to KLO.\n\nI am your personal advisor. To begin arranging your journey, please share your departure and destination.";
 
     setMessages([
       {
@@ -286,7 +286,7 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
                     "max-w-[92%] sm:max-w-[85%] rounded-none p-5 sm:p-6",
                     message.role === 'user'
                       ? "bg-primary/[0.02] border border-primary/10 text-white/90"
-                      : "bg-white/[0.015] border border-white/5 text-white/80"
+                      : "bg-white/[0.01] border border-white/[0.03] text-white/80"
                   )}
                 >
                   <p className="klo-display text-base sm:text-lg leading-relaxed tracking-wide italic font-light whitespace-pre-wrap">
@@ -311,16 +311,18 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="klo-label text-primary/40 text-[9px] flex items-center gap-3"
+              className="klo-label text-primary/40 text-[9px] flex items-center gap-4"
               style={{ letterSpacing: '0.45em' }}
             >
-              <div className="flex gap-1.5">
-                <span className="w-0.5 h-0.5 bg-primary/40 rounded-full animate-bounce [animation-delay:-0.3s]" />
-                <span className="w-0.5 h-0.5 bg-primary/40 rounded-full animate-bounce [animation-delay:-0.15s]" />
-                <span className="w-0.5 h-0.5 bg-primary/40 rounded-full animate-bounce" />
+              <div className="w-12 h-[1px] bg-white/10 relative overflow-hidden">
+                <motion.div
+                  className="absolute inset-0 bg-primary/40"
+                  initial={{ x: '-100%' }}
+                  animate={{ x: '100%' }}
+                  transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+                />
               </div>
-
-              Transmission
+              Attending
             </motion.div>
           )}
 

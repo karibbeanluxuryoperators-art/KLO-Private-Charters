@@ -59,7 +59,7 @@ export default function NavBar() {
             <div className="hairline opacity-30" style={{ height: '20px' }} />
             <a
               href="#enquire"
-              className="klo-label text-[10px] px-5 py-2.5 border oro-border text-white/80 hover:text-white hover:border-[#B8963E] transition-all duration-500"
+              className="klo-label text-[10px] px-5 py-2.5 border oro-border text-white/80 hover:text-white hover:border-primary transition-all duration-500"
               style={{ letterSpacing: '0.20em' }}
             >
               Begin Your Voyage

@@ -161,7 +161,7 @@ export default function FleetSection() {
             style={{ fontSize: '10px' }}
           >
             Request a proposal
-            <span className="w-6 h-[1px] inline-block" style={{ background: '#B8963E', opacity: 0.6 }} />
+            <span className="w-6 h-[1px] inline-block bg-primary opacity-60" />
           </a>
         </div>
 

@@ -111,7 +111,7 @@ export default function RoutesSection() {
                   <span className="klo-display text-white text-xl">{route.from}</span>
                   <span className="klo-label text-white/25 ml-2" style={{ fontSize: '9px' }}>{route.fromCode}</span>
                 </div>
-                <span className="w-8 h-[1px] opacity-30" style={{ background: '#B8963E' }} />
+                <span className="w-8 h-[1px] opacity-30 bg-primary" />
                 <div>
                   <span className="klo-display text-white text-xl">{route.to}</span>
                   <span className="klo-label text-white/25 ml-2" style={{ fontSize: '9px' }}>{route.toCode}</span>
@@ -125,7 +125,7 @@ export default function RoutesSection() {
               <p className="klo-label text-white/40 whitespace-nowrap" style={{ fontSize: '10px' }}>{route.duration}</p>
 
               {/* Type */}
-              <p className="klo-label text-right whitespace-nowrap" style={{ fontSize: '9px', color: '#B8963E', letterSpacing: '0.15em' }}>
+              <p className="klo-label text-right whitespace-nowrap text-primary" style={{ fontSize: '9px', letterSpacing: '0.15em' }}>
                 {route.type}
               </p>
             </div>
