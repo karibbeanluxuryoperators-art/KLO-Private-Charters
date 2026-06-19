@@ -6,7 +6,7 @@
   --font-serif: "Cormorant Garamond", Georgia, serif;
   --font-display: "Inter", ui-sans-serif, sans-serif;
 
-  --color-background: #0A0A0A;
+  --color-background: #0A1518;
   --color-foreground: #F4EFE6;
 
   --color-card: #0F0F0F;
@@ -17,6 +17,8 @@
 
   --color-primary: #B8963E;
   --color-primary-foreground: #0A0A0A;
+
+  --color-luxury-teal: #00a8b5;
 
   --color-secondary: #161616;
   --color-secondary-foreground: #F4EFE6;
