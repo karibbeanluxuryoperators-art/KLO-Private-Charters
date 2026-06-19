@@ -217,7 +217,7 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
   return (
     <Card
       className={cn(
-        "w-full h-full flex flex-col min-h-0 glass border-white/[0.05] shadow-[0_64px_160px_rgba(0,0,0,1)] bg-black/40 relative overflow-hidden rounded-none",
+        "w-full h-full flex flex-col min-h-0 glass border-luxury-teal/10 shadow-[0_64px_160px_rgba(0,0,0,1)] bg-black/40 relative overflow-hidden rounded-none",
         className
       )}
     >
@@ -227,7 +227,7 @@ export default function FlightInquiryChat({ className }: FlightInquiryChatProps)
       <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary/30 to-transparent z-20" />
 
       {/* HEADER */}
-      <div className="p-5 sm:p-6 border-b border-white/[0.05] flex items-center justify-between z-10 bg-black/40 backdrop-blur-2xl flex-none">
+      <div className="p-5 sm:p-6 border-b border-luxury-teal/10 flex items-center justify-between z-10 bg-black/40 backdrop-blur-2xl flex-none">
 
         <div className="flex items-center gap-4">
           <div className="w-1 h-1 rounded-full bg-primary animate-pulse shadow-[0_0_8px_var(--color-primary)/0.6]" />
